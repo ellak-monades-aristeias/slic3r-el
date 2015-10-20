@@ -10,7 +10,7 @@ use base 'Wx::Dialog';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, -1, "Device Browser", wxDefaultPosition, [350,700], wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+    my $self = $class->SUPER::new($parent, -1, "Περιήγηση Συσκευής", wxDefaultPosition, [350,700], wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     
     # look for devices
     eval "use Net::Bonjour; 1";
@@ -19,7 +19,7 @@ sub new {
     $self->{devices} = [ $res->entries ];
     
     # label
-    my $text = Wx::StaticText->new($self, -1, "Choose an OctoPrint device in your network:", wxDefaultPosition, wxDefaultSize);
+    my $text = Wx::StaticText->new($self, -1, "Επιλέξτε μια συσκευή OctoPrint στο δίκτυό σας:", wxDefaultPosition, wxDefaultSize);
     
     # selector
     $self->{choice} = my $choice = Wx::Choice->new($self, -1, wxDefaultPosition, wxDefaultSize,

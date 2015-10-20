@@ -40,8 +40,8 @@ sub new {
             wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
         $self->{btn_delete_preset} = Wx::BitmapButton->new($self, -1, Wx::Bitmap->new("$Slic3r::var/delete.png", wxBITMAP_TYPE_PNG), 
             wxDefaultPosition, wxDefaultSize, wxBORDER_NONE);
-        $self->{btn_save_preset}->SetToolTipString("Save current " . lc($self->title));
-        $self->{btn_delete_preset}->SetToolTipString("Delete this preset");
+        $self->{btn_save_preset}->SetToolTipString("Αποθήκευση τρέχοντος " . lc($self->title));
+        $self->{btn_delete_preset}->SetToolTipString("Διαγραφή αυτής της προεπιλογής");
         $self->{btn_delete_preset}->Disable;
         
         ### These cause GTK warnings:
@@ -94,7 +94,7 @@ sub new {
     EVT_BUTTON($self, $self->{btn_delete_preset}, sub {
         my $i = $self->current_preset;
         return if $i == 0;  # this shouldn't happen but let's trap it anyway
-        my $res = Wx::MessageDialog->new($self, "Are you sure you want to delete the selected preset?", 'Delete Preset', wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION)->ShowModal;
+        my $res = Wx::MessageDialog->new($self, "Είστε σίγουρος πως θέλετε να διαγράψετε την επιλεγμένη προρύθμιση;", 'Διαγραφή Προρύθμισης', wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION)->ShowModal;
         return unless $res == wxID_YES;
         if (-e $self->{presets}[$i]->file) {
             unlink $self->{presets}[$i]->file;
@@ -214,7 +214,7 @@ sub on_select_preset {
     
     if ($self->is_dirty) {
         my $old_preset = $self->get_current_preset;
-        my $name = $old_preset->default ? 'Default preset' : "Preset \"" . $old_preset->name . "\"";
+        my $name = $old_preset->default ? 'Προκαθορισμένη προρύθμιση' : "Προρύθμιση \"" . $old_preset->name . "\"";
         
         my @option_names = ();
         foreach my $opt_key (@{$self->dirty_options}) {
@@ -227,8 +227,8 @@ sub on_select_preset {
         }
         
         my $changes = join "\n", map "- $_", @option_names;
-        my $confirm = Wx::MessageDialog->new($self, "$name has unsaved changes:\n$changes\n\nDiscard changes and continue anyway?",
-                                             'Unsaved Changes', wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+        my $confirm = Wx::MessageDialog->new($self, "$name έχει μη αποθηκευμένες αλλαγές:\n$changes\n\nΑπόρριψη αλλαγών και συνέχεια;",
+                                             'Μη Αποθηκευμένες Αλλαγές', wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
         if ($confirm->ShowModal == wxID_NO) {
             $self->{presets_choice}->SetSelection($self->current_preset);
             
@@ -258,7 +258,7 @@ sub on_select_preset {
         $Slic3r::GUI::Settings->{presets}{$self->name} = $preset->file ? basename($preset->file) : '';
     };
     if ($@) {
-        $@ = "I was unable to load the selected config file: $@";
+        $@ = "Δεν ήμουν σε θέση να φορτώσω το επιλεγμένο αρχείο ρυθμίσεων: $@";
         Slic3r::GUI::catch_error($self);
         $self->select_default_preset;
     }
@@ -449,7 +449,7 @@ use List::Util qw(first);
 use Wx qw(:icon :dialog :id);
 
 sub name { 'print' }
-sub title { 'Print Settings' }
+sub title { 'Ρυθμίσεις Εκτύπωσης' }
 
 sub build {
     my $self = shift;
@@ -495,19 +495,19 @@ sub build {
     ));
     
     {
-        my $page = $self->add_options_page('Layers and perimeters', 'layers.png');
+        my $page = $self->add_options_page('Στρώσεις και περίμετροι', 'layers.png');
         {
-            my $optgroup = $page->new_optgroup('Layer height');
+            my $optgroup = $page->new_optgroup('Ύψος Στρώσης');
             $optgroup->append_single_option_line('layer_height');
             $optgroup->append_single_option_line('first_layer_height');
         }
         {
-            my $optgroup = $page->new_optgroup('Vertical shells');
+            my $optgroup = $page->new_optgroup('Κατακόρυφα κελύφη');
             $optgroup->append_single_option_line('perimeters');
             $optgroup->append_single_option_line('spiral_vase');
         }
         {
-            my $optgroup = $page->new_optgroup('Horizontal shells');
+            my $optgroup = $page->new_optgroup('Οριζόντια κελύφη');
             my $line = Slic3r::GUI::OptionsGroup::Line->new(
                 label => 'Solid layers',
             );
@@ -516,34 +516,34 @@ sub build {
             $optgroup->append_line($line);
         }
         {
-            my $optgroup = $page->new_optgroup('Quality (slower slicing)');
+            my $optgroup = $page->new_optgroup('Ποιότητα (βραδύτερο τεμάχισμα)');
             $optgroup->append_single_option_line('extra_perimeters');
             $optgroup->append_single_option_line('avoid_crossing_perimeters');
             $optgroup->append_single_option_line('thin_walls');
             $optgroup->append_single_option_line('overhangs');
         }
         {
-            my $optgroup = $page->new_optgroup('Advanced');
+            my $optgroup = $page->new_optgroup('Σύνθετες');
             $optgroup->append_single_option_line('seam_position');
             $optgroup->append_single_option_line('external_perimeters_first');
         }
     }
     
     {
-        my $page = $self->add_options_page('Infill', 'shading.png');
+        my $page = $self->add_options_page('Εσωτερικό Γέμισμα', 'shading.png');
         {
-            my $optgroup = $page->new_optgroup('Infill');
+            my $optgroup = $page->new_optgroup('Εσωτερικό Γέμισμα');
             $optgroup->append_single_option_line('fill_density');
             $optgroup->append_single_option_line('fill_pattern');
             $optgroup->append_single_option_line('external_fill_pattern');
         }
         {
-            my $optgroup = $page->new_optgroup('Reducing printing time');
+            my $optgroup = $page->new_optgroup('Μείωση χρόνου εκτύπωσης');
             $optgroup->append_single_option_line('infill_every_layers');
             $optgroup->append_single_option_line('infill_only_where_needed');
         }
         {
-            my $optgroup = $page->new_optgroup('Advanced');
+            my $optgroup = $page->new_optgroup('Σύνθετες');
             $optgroup->append_single_option_line('solid_infill_every_layers');
             $optgroup->append_single_option_line('fill_angle');
             $optgroup->append_single_option_line('solid_infill_below_area');
@@ -553,34 +553,34 @@ sub build {
     }
     
     {
-        my $page = $self->add_options_page('Skirt and brim', 'box.png');
+        my $page = $self->add_options_page('Προέκταση Βάσης και Χείλος', 'box.png');
         {
-            my $optgroup = $page->new_optgroup('Skirt');
+            my $optgroup = $page->new_optgroup('Προέκταση Βάσης');
             $optgroup->append_single_option_line('skirts');
             $optgroup->append_single_option_line('skirt_distance');
             $optgroup->append_single_option_line('skirt_height');
             $optgroup->append_single_option_line('min_skirt_length');
         }
         {
-            my $optgroup = $page->new_optgroup('Brim');
+            my $optgroup = $page->new_optgroup('Χείλος');
             $optgroup->append_single_option_line('brim_width');
         }
     }
     
     {
-        my $page = $self->add_options_page('Support material', 'building.png');
+        my $page = $self->add_options_page('Υλικό υποστήριξης', 'building.png');
         {
-            my $optgroup = $page->new_optgroup('Support material');
+            my $optgroup = $page->new_optgroup('Υλικό Υποστήριξης');
             $optgroup->append_single_option_line('support_material');
             $optgroup->append_single_option_line('support_material_threshold');
             $optgroup->append_single_option_line('support_material_enforce_layers');
         }
         {
-            my $optgroup = $page->new_optgroup('Raft');
+            my $optgroup = $page->new_optgroup('Σχεδία');
             $optgroup->append_single_option_line('raft_layers');
         }
         {
-            my $optgroup = $page->new_optgroup('Options for support material and raft');
+            my $optgroup = $page->new_optgroup('Επιλογές για υλικό υποστήριξης και σχεδίας');
             $optgroup->append_single_option_line('support_material_contact_distance');
             $optgroup->append_single_option_line('support_material_pattern');
             $optgroup->append_single_option_line('support_material_spacing');
@@ -592,9 +592,9 @@ sub build {
     }
     
     {
-        my $page = $self->add_options_page('Speed', 'time.png');
+        my $page = $self->add_options_page('Ταχύτητα', 'time.png');
         {
-            my $optgroup = $page->new_optgroup('Speed for print moves');
+            my $optgroup = $page->new_optgroup('Ταχύτητα κινήσεων εκτυπωτή');
             $optgroup->append_single_option_line('perimeter_speed');
             $optgroup->append_single_option_line('small_perimeter_speed');
             $optgroup->append_single_option_line('external_perimeter_speed');
@@ -607,15 +607,15 @@ sub build {
             $optgroup->append_single_option_line('gap_fill_speed');
         }
         {
-            my $optgroup = $page->new_optgroup('Speed for non-print moves');
+            my $optgroup = $page->new_optgroup('Ταχύτητα κινήσεων μη εκτύπωσης');
             $optgroup->append_single_option_line('travel_speed');
         }
         {
-            my $optgroup = $page->new_optgroup('Modifiers');
+            my $optgroup = $page->new_optgroup('Τροποποιητές');
             $optgroup->append_single_option_line('first_layer_speed');
         }
         {
-            my $optgroup = $page->new_optgroup('Acceleration control (advanced)');
+            my $optgroup = $page->new_optgroup('Έλεγχος επιτάχυνσης (σύνθετες)');
             $optgroup->append_single_option_line('perimeter_acceleration');
             $optgroup->append_single_option_line('infill_acceleration');
             $optgroup->append_single_option_line('bridge_acceleration');
@@ -623,16 +623,16 @@ sub build {
             $optgroup->append_single_option_line('default_acceleration');
         }
         {
-            my $optgroup = $page->new_optgroup('Autospeed (advanced)');
+            my $optgroup = $page->new_optgroup('Αυτόματη ταχύτητα (σύνθετες)');
             $optgroup->append_single_option_line('max_print_speed');
             $optgroup->append_single_option_line('max_volumetric_speed');
         }
     }
     
     {
-        my $page = $self->add_options_page('Multiple Extruders', 'funnel.png');
+        my $page = $self->add_options_page('Πολλαπλοί εξωθητήρες', 'funnel.png');
         {
-            my $optgroup = $page->new_optgroup('Extruders');
+            my $optgroup = $page->new_optgroup('Εξωθητήρες');
             $optgroup->append_single_option_line('perimeter_extruder');
             $optgroup->append_single_option_line('infill_extruder');
             $optgroup->append_single_option_line('solid_infill_extruder');
@@ -640,20 +640,20 @@ sub build {
             $optgroup->append_single_option_line('support_material_interface_extruder');
         }
         {
-            my $optgroup = $page->new_optgroup('Ooze prevention');
+            my $optgroup = $page->new_optgroup('Αποφυγή σταξίματος');
             $optgroup->append_single_option_line('ooze_prevention');
             $optgroup->append_single_option_line('standby_temperature_delta');
         }
         {
-            my $optgroup = $page->new_optgroup('Advanced');
+            my $optgroup = $page->new_optgroup('Σύνθετες');
             $optgroup->append_single_option_line('interface_shells');
         }
     }
     
     {
-        my $page = $self->add_options_page('Advanced', 'wrench.png');
+        my $page = $self->add_options_page('Σύνθετες', 'wrench.png');
         {
-            my $optgroup = $page->new_optgroup('Extrusion width',
+            my $optgroup = $page->new_optgroup('Πλάτος εξώθησης',
                 label_width => 180,
             );
             $optgroup->append_single_option_line('extrusion_width');
@@ -666,15 +666,15 @@ sub build {
             $optgroup->append_single_option_line('support_material_extrusion_width');
         }
         {
-            my $optgroup = $page->new_optgroup('Overlap');
+            my $optgroup = $page->new_optgroup('Επικάλυψη');
             $optgroup->append_single_option_line('infill_overlap');
         }
         {
-            my $optgroup = $page->new_optgroup('Flow');
+            my $optgroup = $page->new_optgroup('Ροή');
             $optgroup->append_single_option_line('bridge_flow_ratio');
         }
         {
-            my $optgroup = $page->new_optgroup('Other');
+            my $optgroup = $page->new_optgroup('Άλλα');
             $optgroup->append_single_option_line('xy_size_compensation');
             $optgroup->append_single_option_line('threads') if $Slic3r::have_threads;
             $optgroup->append_single_option_line('resolution');
@@ -682,12 +682,12 @@ sub build {
     }
     
     {
-        my $page = $self->add_options_page('Output options', 'page_white_go.png');
+        my $page = $self->add_options_page('Επιλογές εξόδου', 'page_white_go.png');
         {
-            my $optgroup = $page->new_optgroup('Sequential printing');
+            my $optgroup = $page->new_optgroup('Διαδοχική εκτύπωση');
             $optgroup->append_single_option_line('complete_objects');
             my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                label => 'Extruder clearance (mm)',
+                label => 'Κάθαρση εξωθητήρα (mm)',
             );
             foreach my $opt_key (qw(extruder_clearance_radius extruder_clearance_height)) {
                 my $option = $optgroup->get_option($opt_key);
@@ -697,7 +697,7 @@ sub build {
             $optgroup->append_line($line);
         }
         {
-            my $optgroup = $page->new_optgroup('Output file');
+            my $optgroup = $page->new_optgroup('Αρχείο εξόδου');
             $optgroup->append_single_option_line('gcode_comments');
             
             {
@@ -707,7 +707,7 @@ sub build {
             }
         }
         {
-            my $optgroup = $page->new_optgroup('Post-processing scripts',
+            my $optgroup = $page->new_optgroup('Δέσμες ενεργειών μετά την επεξεργασία',
                 label_width => 0,
             );
             my $option = $optgroup->get_option('post_process');
@@ -718,9 +718,9 @@ sub build {
     }
     
     {
-        my $page = $self->add_options_page('Notes', 'note.png');
+        my $page = $self->add_options_page('Σημειώσεις', 'note.png');
         {
-            my $optgroup = $page->new_optgroup('Notes',
+            my $optgroup = $page->new_optgroup('Σημειώσεις',
                 label_width => 0,
             );
             my $option = $optgroup->get_option('notes');
@@ -738,13 +738,13 @@ sub _update {
     
     if ($config->spiral_vase && !($config->perimeters == 1 && $config->top_solid_layers == 0 && $config->fill_density == 0)) {
         my $dialog = Wx::MessageDialog->new($self,
-            "The Spiral Vase mode requires:\n"
-            . "- one perimeter\n"
-            . "- no top solid layers\n"
-            . "- 0% fill density\n"
-            . "- no support material\n"
-            . "\nShall I adjust those settings in order to enable Spiral Vase?",
-            'Spiral Vase', wxICON_WARNING | wxYES | wxNO);
+            "Το Δοχείο Σπιράλ απαιτεί:\n"
+            . "- μία περίμετρο\n"
+            . "- μη στερεές άνω στρώσεις\n"
+            . "- 0% πυκνότητα συμπλήρωσης\n"
+            . "- την απουσία υλικού υποστήριξης\n"
+            . "\nΝα προσαρμόσω αυτές τις ρυθμίσεις προκειμένου να ενεργοποιηθεί το Δοχείο Σπιράλ;",
+            'Δοχείο Σπιράλ', wxICON_WARNING | wxYES | wxNO);
         if ($dialog->ShowModal() == wxID_YES) {
             my $new_conf = Slic3r::Config->new;
             $new_conf->set("perimeters", 1);
@@ -762,9 +762,9 @@ sub _update {
     if ($config->fill_density == 100
         && !first { $_ eq $config->fill_pattern } @{$Slic3r::Config::Options->{external_fill_pattern}{values}}) {
         my $dialog = Wx::MessageDialog->new($self,
-            "The " . $config->fill_pattern . " infill pattern is not supposed to work at 100% density.\n"
-            . "\nShall I switch to rectilinear fill pattern?",
-            'Infill', wxICON_WARNING | wxYES | wxNO);
+            "Το " . $config->fill_pattern . " μοτίβο γεμίσματος δεν πρέπει να λειτουργεί με 100% πυκνότητα.\n"
+            . "\nΝα το αλλάξω σε ευθύγραμμο μοτίβο γεμίσματος;?",
+            'Εσωτερικό γέμισμα', wxICON_WARNING | wxYES | wxNO);
         
         my $new_conf = Slic3r::Config->new;
         if ($dialog->ShowModal() == wxID_YES) {
@@ -844,7 +844,7 @@ package Slic3r::GUI::Tab::Filament;
 use base 'Slic3r::GUI::Tab';
 
 sub name { 'filament' }
-sub title { 'Filament Settings' }
+sub title { 'Ρυθμίσεις Υλικού' }
 
 sub build {
     my $self = shift;
@@ -858,20 +858,20 @@ sub build {
     ));
     
     {
-        my $page = $self->add_options_page('Filament', 'spool.png');
+        my $page = $self->add_options_page('Υλικό', 'spool.png');
         {
-            my $optgroup = $page->new_optgroup('Filament');
+            my $optgroup = $page->new_optgroup('Υλικό');
             $optgroup->append_single_option_line('filament_colour', 0);
             $optgroup->append_single_option_line('filament_diameter', 0);
             $optgroup->append_single_option_line('extrusion_multiplier', 0);
         }
     
         {
-            my $optgroup = $page->new_optgroup('Temperature (°C)');
+            my $optgroup = $page->new_optgroup('Θερμοκρασία (°C)');
         
             {
                 my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                    label => 'Extruder',
+                    label => 'Εξωθητήρας',
                 );
                 $line->append_option($optgroup->get_option('first_layer_temperature', 0));
                 $line->append_option($optgroup->get_option('temperature', 0));
@@ -880,7 +880,7 @@ sub build {
         
             {
                 my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                    label => 'Bed',
+                    label => 'Πλατφόρμα εκτύπωσης',
                 );
                 $line->append_option($optgroup->get_option('first_layer_bed_temperature'));
                 $line->append_option($optgroup->get_option('bed_temperature'));
@@ -890,9 +890,9 @@ sub build {
     }
     
     {
-        my $page = $self->add_options_page('Cooling', 'hourglass.png');
+        my $page = $self->add_options_page('Ψύξη', 'hourglass.png');
         {
-            my $optgroup = $page->new_optgroup('Enable');
+            my $optgroup = $page->new_optgroup('Ενεργοποίηση');
             $optgroup->append_single_option_line('fan_always_on');
             $optgroup->append_single_option_line('cooling');
             
@@ -907,11 +907,11 @@ sub build {
             $optgroup->append_line($line);
         }
         {
-            my $optgroup = $page->new_optgroup('Fan settings');
+            my $optgroup = $page->new_optgroup('Ρυθμίσεις ανεμιστήρα');
             
             {
                 my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                    label => 'Fan speed',
+                    label => 'Ταχύτητα ανεμιστήρα',
                 );
                 $line->append_option($optgroup->get_option('min_fan_speed'));
                 $line->append_option($optgroup->get_option('max_fan_speed'));
@@ -922,7 +922,7 @@ sub build {
             $optgroup->append_single_option_line('disable_fan_first_layers');
         }
         {
-            my $optgroup = $page->new_optgroup('Cooling thresholds',
+            my $optgroup = $page->new_optgroup('Κατώτατα όρια ψύξης',
                 label_width => 250,
             );
             $optgroup->append_single_option_line('fan_below_layer_time');
@@ -951,24 +951,24 @@ sub _update_description {
     
     my $msg = "";
     my $fan_other_layers = $config->fan_always_on
-        ? sprintf "will always run at %d%%%s.", $config->min_fan_speed,
+        ? sprintf "θα τρέχει πάντα %d%%%s.", $config->min_fan_speed,
                 ($config->disable_fan_first_layers > 1
-                    ? " except for the first " . $config->disable_fan_first_layers . " layers"
+                    ? " εκτός από τις πρώτες " . $config->disable_fan_first_layers . " στρώσεις"
                     : $config->disable_fan_first_layers == 1
-                        ? " except for the first layer"
+                        ? " εκτός από την πρώστη στρώση"
                         : "")
-        : "will be turned off.";
+        : "θα τερματιστούν.";
     
     if ($config->cooling) {
-        $msg = sprintf "If estimated layer time is below ~%ds, fan will run at %d%% and print speed will be reduced so that no less than %ds are spent on that layer (however, speed will never be reduced below %dmm/s).",
+        $msg = sprintf "Εάν ο εκτιμώμενος χρόνος στρώσης είναι κάτω από ~%ds, ο ανεμιστήρας θα λειτουργεί στο %d%% και η ταχύτητα εκτύπωσης θα μειωθεί έτσι ώστε να μην δαπανόνται λιγότερο από %ds σε αυτή τη στρώση (ωστόσο, η ταχύτητα δεν θα μειωθεί ποτέ κάτω από %dmm/s).",
             $config->slowdown_below_layer_time, $config->max_fan_speed, $config->slowdown_below_layer_time, $config->min_print_speed;
         if ($config->fan_below_layer_time > $config->slowdown_below_layer_time) {
-            $msg .= sprintf "\nIf estimated layer time is greater, but still below ~%ds, fan will run at a proportionally decreasing speed between %d%% and %d%%.",
+            $msg .= sprintf "\nΕάν ο εκτιμώμενος χρόνος είναι μεγαλύτερος, αλλά ακόμα κάτω από ~%ds, ο ανεμιστήρας θα λειτουργεί σε αναλογικά φθίνουσα ταχύτητα μεταξύ %d%% και %d%%.",
                 $config->fan_below_layer_time, $config->max_fan_speed, $config->min_fan_speed;
         }
-        $msg .= "\nDuring the other layers, fan $fan_other_layers"
+        $msg .= "\nΚατά τη διάρκεια των άλλων στρώσεων, ο ανεμιστήρας $fan_other_layers"
     } else {
-        $msg = "Fan $fan_other_layers";
+        $msg = "Ανεμιστήρας $fan_other_layers";
     }
     $self->{description_line}->SetText($msg);
 }
@@ -979,7 +979,7 @@ use Wx qw(wxTheApp :sizer :button :bitmap :misc :id);
 use Wx::Event qw(EVT_BUTTON);
 
 sub name { 'printer' }
-sub title { 'Printer Settings' }
+sub title { 'Ρυθμίσεις Εκτυπωτή' }
 
 sub build {
     my $self = shift;
@@ -999,7 +999,7 @@ sub build {
     my $bed_shape_widget = sub {
         my ($parent) = @_;
         
-        my $btn = Wx::Button->new($parent, -1, "Set…", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
+        my $btn = Wx::Button->new($parent, -1, "Ορισμός…", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
         $btn->SetFont($Slic3r::GUI::small_font);
         if ($Slic3r::GUI::have_button_icons) {
             $btn->SetBitmap(Wx::Bitmap->new("$Slic3r::var/cog.png", wxBITMAP_TYPE_PNG));
@@ -1024,12 +1024,12 @@ sub build {
     $self->{extruders_count} = 1;
     
     {
-        my $page = $self->add_options_page('General', 'printer_empty.png');
+        my $page = $self->add_options_page('Γενικά', 'printer_empty.png');
         {
-            my $optgroup = $page->new_optgroup('Size and coordinates');
+            my $optgroup = $page->new_optgroup('Μέγεθος και συντεταγμένες');
             
             my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                label       => 'Bed shape',
+                label       => 'Σχήμα πλατφόρμας εκτύπωσης',
                 widget      => $bed_shape_widget,
             );
             $optgroup->append_line($line);
@@ -1037,13 +1037,13 @@ sub build {
             $optgroup->append_single_option_line('z_offset');
         }
         {
-            my $optgroup = $page->new_optgroup('Capabilities');
+            my $optgroup = $page->new_optgroup('Δυνατότητες');
             {
                 my $option = Slic3r::GUI::OptionsGroup::Option->new(
                     opt_id      => 'extruders_count',
                     type        => 'i',
                     default     => 1,
-                    label       => 'Extruders',
+                    label       => 'Εξωθητήρες',
                     tooltip     => 'Number of extruders of the printer.',
                     min         => 1,
                 );
@@ -1060,13 +1060,13 @@ sub build {
             });
         }
         {
-            my $optgroup = $page->new_optgroup('OctoPrint upload');
+            my $optgroup = $page->new_optgroup('Μεταφόρτωση OctoPrint');
             
             # append two buttons to the Host line
             my $octoprint_host_browse = sub {
                 my ($parent) = @_;
                 
-                my $btn = Wx::Button->new($parent, -1, "Browse…", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
+                my $btn = Wx::Button->new($parent, -1, "Περιήγηση…", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
                 $btn->SetFont($Slic3r::GUI::small_font);
                 if ($Slic3r::GUI::have_button_icons) {
                     $btn->SetBitmap(Wx::Bitmap->new("$Slic3r::var/zoom.png", wxBITMAP_TYPE_PNG));
@@ -1092,7 +1092,7 @@ sub build {
             my $octoprint_host_test = sub {
                 my ($parent) = @_;
                 
-                my $btn = $self->{octoprint_host_test_btn} = Wx::Button->new($parent, -1, "Test", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
+                my $btn = $self->{octoprint_host_test_btn} = Wx::Button->new($parent, -1, "Τεστ", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
                 $btn->SetFont($Slic3r::GUI::small_font);
                 if ($Slic3r::GUI::have_button_icons) {
                     $btn->SetBitmap(Wx::Bitmap->new("$Slic3r::var/wrench.png", wxBITMAP_TYPE_PNG));
@@ -1107,11 +1107,11 @@ sub build {
                         'X-Api-Key' => $self->{config}->octoprint_apikey,
                     );
                     if ($res->is_success) {
-                        Slic3r::GUI::show_info($self, "Connection to OctoPrint works correctly.", "Success!");
+                        Slic3r::GUI::show_info($self, "Η σύνδεση με τον OctoPrint λειτουργεί σωστά.", "Επιτυχία!");
                     } else {
                         Slic3r::GUI::show_error($self,
-                            "I wasn't able to connect to OctoPrint (" . $res->status_line . "). "
-                            . "Check hostname and OctoPrint version (at least 1.1.0 is required).");
+                            "Δεν ήμουν σε θέση να συνδεθώ με τον ΟctoPrint (" . $res->status_line . "). "
+                            . "Ελέγξτε το όνομα πραρόχου και την έκδοση OctoPrint (απαιτείται τουλάχιστον 1.1.0).");
                     }
                 });
                 return $btn;
@@ -1124,11 +1124,11 @@ sub build {
             $optgroup->append_single_option_line('octoprint_apikey');
         }
         {
-            my $optgroup = $page->new_optgroup('Firmware');
+            my $optgroup = $page->new_optgroup('Λειτουργικό');
             $optgroup->append_single_option_line('gcode_flavor');
         }
         {
-            my $optgroup = $page->new_optgroup('Advanced');
+            my $optgroup = $page->new_optgroup('Σύνθετες');
             $optgroup->append_single_option_line('use_relative_e_distances');
             $optgroup->append_single_option_line('use_firmware_retraction');
             $optgroup->append_single_option_line('use_volumetric_e');
@@ -1137,9 +1137,9 @@ sub build {
         }
     }
     {
-        my $page = $self->add_options_page('Custom G-code', 'cog.png');
+        my $page = $self->add_options_page('Προσαρμοσμένος G-code', 'cog.png');
         {
-            my $optgroup = $page->new_optgroup('Start G-code',
+            my $optgroup = $page->new_optgroup('G-code εκκίνησης',
                 label_width => 0,
             );
             my $option = $optgroup->get_option('start_gcode');
@@ -1148,7 +1148,7 @@ sub build {
             $optgroup->append_single_option_line($option);
         }
         {
-            my $optgroup = $page->new_optgroup('End G-code',
+            my $optgroup = $page->new_optgroup('G-code τερματισμού',
                 label_width => 0,
             );
             my $option = $optgroup->get_option('end_gcode');
@@ -1157,7 +1157,7 @@ sub build {
             $optgroup->append_single_option_line($option);
         }
         {
-            my $optgroup = $page->new_optgroup('Before layer change G-code',
+            my $optgroup = $page->new_optgroup('G-code πριν την αλλαγή στρώσης',
                 label_width => 0,
             );
             my $option = $optgroup->get_option('before_layer_gcode');
@@ -1166,7 +1166,7 @@ sub build {
             $optgroup->append_single_option_line($option);
         }
         {
-            my $optgroup = $page->new_optgroup('After layer change G-code',
+            my $optgroup = $page->new_optgroup('G-code μετά την αλλαγή στρώσης',
                 label_width => 0,
             );
             my $option = $optgroup->get_option('layer_gcode');
@@ -1175,7 +1175,7 @@ sub build {
             $optgroup->append_single_option_line($option);
         }
         {
-            my $optgroup = $page->new_optgroup('Tool change G-code',
+            my $optgroup = $page->new_optgroup('G-code αλλαγής εργαλείου',
                 label_width => 0,
             );
             my $option = $optgroup->get_option('toolchange_gcode');
@@ -1224,20 +1224,20 @@ sub _build_extruder_pages {
         # build page
         my $page = $self->{extruder_pages}[$extruder_idx] = $self->add_options_page("Extruder " . ($extruder_idx + 1), 'funnel.png');
         {
-            my $optgroup = $page->new_optgroup('Size');
+            my $optgroup = $page->new_optgroup('Μέγεθος');
             $optgroup->append_single_option_line('nozzle_diameter', $extruder_idx);
         }
         {
-            my $optgroup = $page->new_optgroup('Position (for multi-extruder printers)');
+            my $optgroup = $page->new_optgroup('Θέση (για εκτυπωτές πολλαπλών εξωθητήρων)');
             $optgroup->append_single_option_line('extruder_offset', $extruder_idx);
         }
         {
-            my $optgroup = $page->new_optgroup('Retraction');
+            my $optgroup = $page->new_optgroup('Ανάκληση');
             $optgroup->append_single_option_line($_, $extruder_idx)
                 for qw(retract_length retract_lift retract_speed retract_restart_extra retract_before_travel retract_layer_change wipe);
         }
         {
-            my $optgroup = $page->new_optgroup('Retraction when tool is disabled (advanced settings for multi-extruder setups)');
+            my $optgroup = $page->new_optgroup('Ανάκληση όταν το εργαλείο είναι απενεργοποιημένο (σύνθετες ρυθμίσεις για την εγκατάσταση πολλαπλών εξωθητήρων)');
             $optgroup->append_single_option_line($_, $extruder_idx)
                 for qw(retract_length_toolchange retract_restart_extra_toolchange);
         }
@@ -1254,7 +1254,7 @@ sub _build_extruder_pages {
         my $values = $self->{config}->get($opt_key);
         splice @$values, $self->{extruders_count} if $self->{extruders_count} <= $#$values;
         $self->{config}->set($opt_key, $values)
-            or die "Unable to truncate $opt_key";
+            or die "Αδυναμία περικοπής $opt_key";
     }
     
     # rebuild page list
@@ -1325,9 +1325,9 @@ sub load_config_file {
     $self->SUPER::load_config_file(@_);
     
     Slic3r::GUI::warning_catcher($self)->(
-        "Your configuration was imported. However, Slic3r is currently only able to import settings "
-        . "for the first defined filament. We recommend you don't use exported configuration files "
-        . "for multi-extruder setups and rely on the built-in preset management system instead.")
+        "Οι ρυθμίσεις σας εισήχθησαν. Ωστόσο, το Slic3r προσωρινά μπορεί μόνο να εισάγει ρυθμίσεις "
+        . "για το πρώτο ορισμένο υλικό εκτύπωσης. Σας προτείνουμε να μην χρησιμοποιήσετε εξαγώμενα αρχεία ρυθμίσεων "
+        . "για την εγκατάσταση πολλαπλών εξωθητήρων και να βασίζεστε στο ενσωματομένο προκαθορισμένο σύστημα διαχείρισης.")
         if @{ $self->{config}->nozzle_diameter } > 1;
 }
 
@@ -1408,11 +1408,11 @@ use base 'Wx::Dialog';
 sub new {
     my $class = shift;
     my ($parent, %params) = @_;
-    my $self = $class->SUPER::new($parent, -1, "Save preset", wxDefaultPosition, wxDefaultSize);
+    my $self = $class->SUPER::new($parent, -1, "Αποθήκευση Προκαθορισμένης Ρύθμισης", wxDefaultPosition, wxDefaultSize);
     
     my @values = @{$params{values}};
     
-    my $text = Wx::StaticText->new($self, -1, "Save " . lc($params{title}) . " as:", wxDefaultPosition, wxDefaultSize);
+    my $text = Wx::StaticText->new($self, -1, "Αποθήκευση " . lc($params{title}) . " ως:", wxDefaultPosition, wxDefaultSize);
     $self->{combo} = Wx::ComboBox->new($self, -1, $params{default}, wxDefaultPosition, wxDefaultSize, \@values,
                                        wxTE_PROCESS_ENTER);
     my $buttons = $self->CreateStdDialogButtonSizer(wxOK | wxCANCEL);
@@ -1436,9 +1436,9 @@ sub accept {
 
     if (($self->{chosen_name} = $self->{combo}->GetValue)) {
         if ($self->{chosen_name} !~ /^[^<>:\/\\|?*\"]+$/i) {
-            Slic3r::GUI::show_error($self, "The supplied name is not valid; the following characters are not allowed: <>:/\|?*\"");
-        } elsif ($self->{chosen_name} eq '- default -') {
-            Slic3r::GUI::show_error($self, "The supplied name is not available.");
+            Slic3r::GUI::show_error($self, "Το παρεχόμενο όνομα δεν είναι έγκυρο· οι παρακάτω χαρακτήρες δεν επιτρέπονται: <>:/\|?*\"");
+        } elsif ($self->{chosen_name} eq '- Προκαθορισμένο -') {
+            Slic3r::GUI::show_error($self, "Το παρεχόμενο όνομα δεν είναι διαθέσιμο.");
         } else {
             $self->EndModal(wxID_OK);
         }
@@ -1465,7 +1465,7 @@ sub config {
         return Slic3r::Config->new_from_defaults(@$keys);
     } else {
         if (!-e Slic3r::encode_path($self->file)) {
-            Slic3r::GUI::show_error(undef, "The selected preset does not exist anymore (" . $self->file . ").");
+            Slic3r::GUI::show_error(undef, "Η επιλεγμένη προκαθορισμένη ρύθμιση δεν υπάρχει πια (" . $self->file . ").");
             return undef;
         }
         

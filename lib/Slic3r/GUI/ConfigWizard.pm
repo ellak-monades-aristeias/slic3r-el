@@ -14,7 +14,7 @@ $wizard = 'Assistant' if &Wx::wxMAC || &Wx::wxGTK;
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, -1, "Configuration $wizard");
+    my $self = $class->SUPER::new($parent, -1, "Βοηθός Διαμόρφωσης");
 
     # initialize an empty repository
     $self->{config} = Slic3r::Config->new;
@@ -265,11 +265,11 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, "Welcome to the Slic3r Configuration $wizard", 'Welcome');
+    my $self = $class->SUPER::new($parent, "Καλώς ήρθατε στον Οδηγό Διαμόρφωσης του Slic3r", 'Καλώς ήρθατε');
 
-    $self->append_text('Hello, welcome to Slic3r! This '.lc($wizard).' helps you with the initial configuration; just a few settings and you will be ready to print.');
-    $self->append_text('To import an existing configuration instead, cancel this '.lc($wizard).' and use the Open Config menu item found in the File menu.');
-    $self->append_text('To continue, click Next.');
+    $self->append_text('Γεια σας, καλώς ήρθατε στο Slic3r! Αυτός ο οδηγός σας βοηθάει με την αρχική διαμόρφωση. Μόνο μερικές ρυθμίσεις και θα είστε έτοιμοι να τυπώσετε.');
+    $self->append_text('Αν θέλετε να εισάγετε μια υπάρχουσα διαμόρφωση, ακυρώστε τον οδηγό και χρησιμοποιήστε το μενού "Φόρτωση Διαμόρφωσης" που βρίσκεται στο μενού αρχείο.');
+    $self->append_text('Για να συνεχίσετε, επιλέξτε Επόμενο.');
 
     return $self;
 }
@@ -280,9 +280,9 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, 'Firmware Type');
+    my $self = $class->SUPER::new($parent, 'Τύπος Λογισμικού');
 
-    $self->append_text('Choose the type of firmware used by your printer, then click Next.');
+    $self->append_text('Επιλέξτε τον τύπο του λογισμικού που χρησιμοποιεί ο εκτυπωτής σας, στη συνέχεια πατήστε Επόμενο.');
     $self->append_option('gcode_flavor');
 
     return $self;
@@ -294,9 +294,9 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, 'Bed Size');
+    my $self = $class->SUPER::new($parent, 'Σχήμα πλατφόρμας εκτύπωσης');
 
-    $self->append_text('Set the shape of your printer\'s bed, then click Next.');
+    $self->append_text('Θέστε το σχήμα πλατφόρμας εκτύπωσης του εκτυπωτή σας, στη συνέχεια επιλέξτε Επόμενο.');
     
     $self->config->apply(Slic3r::Config->new_from_defaults('bed_shape'));
     $self->{bed_shape_panel} = my $panel = Slic3r::GUI::BedShapePanel->new($self, $self->config->bed_shape);
@@ -313,9 +313,9 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, 'Nozzle Diameter');
+    my $self = $class->SUPER::new($parent, 'Διάμετρος ακροφυσίων');
 
-    $self->append_text('Enter the diameter of your printer\'s hot end nozzle, then click Next.');
+    $self->append_text('Εισάγετε τη διάμετρο του ακροφυσίου του εκτυπωτή σας, στη συνέχεια επιλέξτε Επόμενο.');
     $self->append_option('nozzle_diameter#0');
 
     return $self;
@@ -327,10 +327,10 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, 'Filament Diameter');
+    my $self = $class->SUPER::new($parent, 'Διάμετρος υλικού');
 
-    $self->append_text('Enter the diameter of your filament, then click Next.');
-    $self->append_text('Good precision is required, so use a caliper and do multiple measurements along the filament, then compute the average.');
+    $self->append_text('Εισάγετε τη διάμετρο του υλικού σας εκτύπωσης, στη συνέχεια επιλέξτε Επόμενο.');
+    $self->append_text('Είναι απαραίτητη καλή ακρίβεια, για αυτό χρησιμοποιήστε έναν διαβήτη και πραγματοποιήστε πολλαπλές μετρήσεις κατά μήκος του υλικού και υπολογίστε το μέσο όρο.');
     $self->append_option('filament_diameter#0');
 
     return $self;
@@ -342,10 +342,10 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, 'Extrusion Temperature');
+    my $self = $class->SUPER::new($parent, 'Θερμοκρασία Εξωθητήρα');
 
-    $self->append_text('Enter the temperature needed for extruding your filament, then click Next.');
-    $self->append_text('A rule of thumb is 160 to 230 °C for PLA, and 215 to 250 °C for ABS.');
+    $self->append_text('Εισάγετε τη θερμοκρασία που χρειάζεται για την εξώθηση του υλικού εκτύπωσης, στη συνέχεια επιλέξτε Επόμενο.');
+    $self->append_text('Ένας γενικός κανόνας είναι από 160 έως 230 °C για υλικό PLA, και 215 to 250 °C για υλικό ABS.');
     $self->append_option('temperature#0');
 
     return $self;
@@ -357,10 +357,10 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, 'Bed Temperature');
+    my $self = $class->SUPER::new($parent, 'Θερμοκρασία Πλατφόρμας Εκτύπωσης');
 
-    $self->append_text('Enter the bed temperature needed for getting your filament to stick to your heated bed, then click Next.');
-    $self->append_text('A rule of thumb is 60 °C for PLA and 110 °C for ABS. Leave zero if you have no heated bed.');
+    $self->append_text('Εισάγετε τη θερμοκρασία της πλατφόρμας εκτύπωσης που χρειάζεται ώστε το υλικό σας να κολλήσει στη θερμαινόμενη πλατφόρμα εκτύπωσης, στη συνέχεια επιλέξτε Επόμενο.');
+    $self->append_text('Ένας γενικός κανόνας είναι 60 °C για υλικό PLA και 110 °C για ABS. Αφήστε μηδέν αν δεν έχετε θερμαινόμενη πλατφόρμα.');
     $self->append_option('bed_temperature');
     
     return $self;
@@ -372,11 +372,11 @@ use base 'Slic3r::GUI::ConfigWizard::Page';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, 'Congratulations!', 'Finish');
+    my $self = $class->SUPER::new($parent, 'Συγχαρητήρια!', 'Τέλος');
 
-    $self->append_text("You have successfully completed the Slic3r Configuration $wizard. " .
-                       'Slic3r is now configured for your printer and filament.');
-    $self->append_text('To close this '.lc($wizard).' and apply the newly created configuration, click Finish.');
+    $self->append_text("Έχετε ολοκληρώσει επιτυχώς τον Οδηγό Διαμόρφωσης του Slic3r. " .
+                       'Το Slic3r έχει διαμορφωθεί για τον εκτυπωτή και το υλικό σας.');
+    $self->append_text('Για να κλείσετε τον βοηθό και να εφαρμώσετε την καινούρια διαμόρφωση, επιλέξτε Τέλος.');
 
     return $self;
 }

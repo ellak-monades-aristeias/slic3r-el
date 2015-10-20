@@ -12,7 +12,7 @@ use base 'Wx::Dialog';
 sub new {
     my $class = shift;
     my ($parent, $default) = @_;
-    my $self = $class->SUPER::new($parent, -1, "Bed Shape", wxDefaultPosition, [350,700], wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+    my $self = $class->SUPER::new($parent, -1, "Σχήμα Πλατφόρμας Εκτύπωσης", wxDefaultPosition, [350,700], wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     
     $self->{panel} = my $panel = Slic3r::GUI::BedShapePanel->new($self, $default);
     
@@ -58,7 +58,7 @@ sub new {
     
     $self->on_change(undef);
     
-    my $box = Wx::StaticBox->new($self, -1, "Shape");
+    my $box = Wx::StaticBox->new($self, -1, "Σχήμα");
     my $sbsizer = Wx::StaticBoxSizer->new($box, wxVERTICAL);
     
     # shape options
@@ -71,15 +71,15 @@ sub new {
         $optgroup->append_single_option_line(Slic3r::GUI::OptionsGroup::Option->new(
             opt_id      => 'rect_size',
             type        => 'point',
-            label       => 'Size',
-            tooltip     => 'Size in X and Y of the rectangular plate.',
+            label       => 'Μέγεθος',
+            tooltip     => 'Μέγεθος σε Χ και Υ της ορθογώνιας πλάκας.',
             default     => [200,200],
         ));
         $optgroup->append_single_option_line(Slic3r::GUI::OptionsGroup::Option->new(
             opt_id      => 'rect_origin',
             type        => 'point',
-            label       => 'Origin',
-            tooltip     => 'Distance of the 0,0 G-code coordinate from the front left corner of the rectangle.',
+            label       => 'Αρχή',
+            tooltip     => 'Απόσταση των συντεταγμένων 0,0 του G-code από την άνω αριστερή γωνία του ορθογωνίου.',
             default     => [0,0],
         ));
     }
@@ -88,8 +88,8 @@ sub new {
         $optgroup->append_single_option_line(Slic3r::GUI::OptionsGroup::Option->new(
             opt_id      => 'diameter',
             type        => 'f',
-            label       => 'Diameter',
-            tooltip     => 'Diameter of the print bed. It is assumed that origin (0,0) is located in the center.',
+            label       => 'Διάμετρος',
+            tooltip     => 'Διάμετρος της πλατφόρμας εκτύπωσης. Υποτίθεται ότι η αρχή (0,0) βρίσκεται στο κέντρο.',
             sidetext    => 'mm',
             default     => 200,
         ));
@@ -101,7 +101,7 @@ sub new {
             widget      => sub {
                 my ($parent) = @_;
                 
-                my $btn = Wx::Button->new($parent, -1, "Load shape from STL...", wxDefaultPosition, wxDefaultSize);
+                my $btn = Wx::Button->new($parent, -1, "Φόρτωση σχήματος από STL...", wxDefaultPosition, wxDefaultSize);
                 EVT_BUTTON($self, $btn, sub { $self->_load_stl });
                 return $btn;
             }
@@ -364,7 +364,7 @@ sub _init_shape_options_page {
     my $optgroup;
     push @{$self->{optgroups}}, $optgroup = Slic3r::GUI::OptionsGroup->new(
         parent      => $panel,
-        title       => 'Settings',
+        title       => 'Ρυθμίσεις',
         label_width => 100,
         on_change   => sub {
             my ($opt_id) = @_;
@@ -381,7 +381,7 @@ sub _init_shape_options_page {
 sub _load_stl {
     my ($self) = @_;
     
-    my $dialog = Wx::FileDialog->new($self, 'Choose a file to import bed shape from (STL/OBJ/AMF):', "", "", &Slic3r::GUI::MODEL_WILDCARD, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    my $dialog = Wx::FileDialog->new($self, 'Επιλέξτε ένα αρχείο από το οποίο θα εισάγετε το δχήμα πλατφόρμας (STL/OBJ/AMF):', "", "", &Slic3r::GUI::MODEL_WILDCARD, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     if ($dialog->ShowModal != wxID_OK) {
         $dialog->Destroy;
         return;
@@ -394,11 +394,11 @@ sub _load_stl {
     my $expolygons = $mesh->horizontal_projection;
     
     if (@$expolygons == 0) {
-        Slic3r::GUI::show_error($self, "The selected file contains no geometry.");
+        Slic3r::GUI::show_error($self, "Το επιλεγμένο αρχείο δεν περιέχει γεωμετρία.");
         return;
     }
     if (@$expolygons > 1) {
-        Slic3r::GUI::show_error($self, "The selected file contains several disjoint areas. This is not supported.");
+        Slic3r::GUI::show_error($self, "Το επιλεγμένο αρχείο περιέχει πολλές ασυνεχείς περιοχές. Αυτό δεν υποστηρίζεται.");
         return;
     }
     

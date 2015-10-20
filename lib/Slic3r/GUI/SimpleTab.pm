@@ -25,7 +25,7 @@ sub new {
     $self->_update;
     
     {
-        my $label = Wx::StaticText->new($self, -1, "Want more options? Switch to the Expert Mode.", wxDefaultPosition, wxDefaultSize);
+        my $label = Wx::StaticText->new($self, -1, "Θέλετε περισσότερες επιλογές; Αλλάξτε στην Εξειδικευμένη Λειτουργία.", wxDefaultPosition, wxDefaultSize);
         $label->SetFont(Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
         $self->{vsizer}->Add($label, 0, wxEXPAND | wxALL, 10);
     }

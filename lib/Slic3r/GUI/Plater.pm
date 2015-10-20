@@ -115,14 +115,14 @@ sub new {
         $self->{preview3D}->canvas->on_viewport_changed(sub {
             $self->{canvas3D}->set_viewport_from_scene($self->{preview3D}->canvas);
         });
-        $self->{preview_notebook}->AddPage($self->{preview3D}, 'Preview');
+        $self->{preview_notebook}->AddPage($self->{preview3D}, 'Προεπισκόπηση');
         $self->{preview3D_page_idx} = $self->{preview_notebook}->GetPageCount-1;
     }
     
     # Initialize toolpaths preview
     if ($Slic3r::GUI::have_OpenGL) {
         $self->{toolpaths2D} = Slic3r::GUI::Plater::2DToolpaths->new($self->{preview_notebook}, $self->{print});
-        $self->{preview_notebook}->AddPage($self->{toolpaths2D}, 'Layers');
+        $self->{preview_notebook}->AddPage($self->{toolpaths2D}, 'Στρώσεις');
     }
     
     EVT_NOTEBOOK_PAGE_CHANGED($self, $self->{preview_notebook}, sub {
@@ -135,21 +135,21 @@ sub new {
     if (!&Wx::wxMSW) {
         Wx::ToolTip::Enable(1);
         $self->{htoolbar} = Wx::ToolBar->new($self, -1, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL | wxTB_TEXT | wxBORDER_SIMPLE | wxTAB_TRAVERSAL);
-        $self->{htoolbar}->AddTool(TB_ADD, "Add…", Wx::Bitmap->new("$Slic3r::var/brick_add.png", wxBITMAP_TYPE_PNG), '');
-        $self->{htoolbar}->AddTool(TB_REMOVE, "Delete", Wx::Bitmap->new("$Slic3r::var/brick_delete.png", wxBITMAP_TYPE_PNG), '');
-        $self->{htoolbar}->AddTool(TB_RESET, "Delete All", Wx::Bitmap->new("$Slic3r::var/cross.png", wxBITMAP_TYPE_PNG), '');
-        $self->{htoolbar}->AddTool(TB_ARRANGE, "Arrange", Wx::Bitmap->new("$Slic3r::var/bricks.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_ADD, "Προσθήκη…", Wx::Bitmap->new("$Slic3r::var/brick_add.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_REMOVE, "Διαγραφή", Wx::Bitmap->new("$Slic3r::var/brick_delete.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_RESET, "Διαγραφή Όλων", Wx::Bitmap->new("$Slic3r::var/cross.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_ARRANGE, "Διευθέτηση", Wx::Bitmap->new("$Slic3r::var/bricks.png", wxBITMAP_TYPE_PNG), '');
         $self->{htoolbar}->AddSeparator;
-        $self->{htoolbar}->AddTool(TB_MORE, "More", Wx::Bitmap->new("$Slic3r::var/add.png", wxBITMAP_TYPE_PNG), '');
-        $self->{htoolbar}->AddTool(TB_FEWER, "Fewer", Wx::Bitmap->new("$Slic3r::var/delete.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_MORE, "Περισσότερα", Wx::Bitmap->new("$Slic3r::var/add.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_FEWER, "Λιγότερα", Wx::Bitmap->new("$Slic3r::var/delete.png", wxBITMAP_TYPE_PNG), '');
         $self->{htoolbar}->AddSeparator;
         $self->{htoolbar}->AddTool(TB_45CCW, "45° ccw", Wx::Bitmap->new("$Slic3r::var/arrow_rotate_anticlockwise.png", wxBITMAP_TYPE_PNG), '');
         $self->{htoolbar}->AddTool(TB_45CW, "45° cw", Wx::Bitmap->new("$Slic3r::var/arrow_rotate_clockwise.png", wxBITMAP_TYPE_PNG), '');
-        $self->{htoolbar}->AddTool(TB_SCALE, "Scale…", Wx::Bitmap->new("$Slic3r::var/arrow_out.png", wxBITMAP_TYPE_PNG), '');
-        $self->{htoolbar}->AddTool(TB_SPLIT, "Split", Wx::Bitmap->new("$Slic3r::var/shape_ungroup.png", wxBITMAP_TYPE_PNG), '');
-        $self->{htoolbar}->AddTool(TB_CUT, "Cut…", Wx::Bitmap->new("$Slic3r::var/package.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_SCALE, "Κλίμακα…", Wx::Bitmap->new("$Slic3r::var/arrow_out.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_SPLIT, "Διαίρεση", Wx::Bitmap->new("$Slic3r::var/shape_ungroup.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_CUT, "Αποκοπή…", Wx::Bitmap->new("$Slic3r::var/package.png", wxBITMAP_TYPE_PNG), '');
         $self->{htoolbar}->AddSeparator;
-        $self->{htoolbar}->AddTool(TB_SETTINGS, "Settings…", Wx::Bitmap->new("$Slic3r::var/cog.png", wxBITMAP_TYPE_PNG), '');
+        $self->{htoolbar}->AddTool(TB_SETTINGS, "Ρυθμίσεις…", Wx::Bitmap->new("$Slic3r::var/cog.png", wxBITMAP_TYPE_PNG), '');
     } else {
         my %tbar_buttons = (
             add             => "Add…",
@@ -174,9 +174,9 @@ sub new {
 
     $self->{list} = Wx::ListView->new($self, -1, wxDefaultPosition, wxDefaultSize,
         wxLC_SINGLE_SEL | wxLC_REPORT | wxBORDER_SUNKEN | wxTAB_TRAVERSAL | wxWANTS_CHARS );
-    $self->{list}->InsertColumn(0, "Name", wxLIST_FORMAT_LEFT, 145);
-    $self->{list}->InsertColumn(1, "Copies", wxLIST_FORMAT_CENTER, 45);
-    $self->{list}->InsertColumn(2, "Scale", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
+    $self->{list}->InsertColumn(0, "Όνομα", wxLIST_FORMAT_LEFT, 145);
+    $self->{list}->InsertColumn(1, "Αντίγραφα", wxLIST_FORMAT_CENTER, 80);
+    $self->{list}->InsertColumn(2, "Κλίμακα", wxLIST_FORMAT_CENTER, wxLIST_AUTOSIZE_USEHEADER);
     EVT_LIST_ITEM_SELECTED($self, $self->{list}, \&list_item_selected);
     EVT_LIST_ITEM_DESELECTED($self, $self->{list}, \&list_item_deselected);
     EVT_LIST_ITEM_ACTIVATED($self, $self->{list}, \&list_item_activated);
@@ -190,9 +190,9 @@ sub new {
     });
     
     # right pane buttons
-    $self->{btn_export_gcode} = Wx::Button->new($self, -1, "Export G-code…", wxDefaultPosition, [-1, 30], wxBU_LEFT);
-    $self->{btn_send_gcode} = Wx::Button->new($self, -1, "Send to printer", wxDefaultPosition, [-1, 30], wxBU_LEFT);
-    $self->{btn_export_stl} = Wx::Button->new($self, -1, "Export STL…", wxDefaultPosition, [-1, 30], wxBU_LEFT);
+    $self->{btn_export_gcode} = Wx::Button->new($self, -1, "Εξαγωγή G-code…", wxDefaultPosition, [-1, 30], wxBU_LEFT);
+    $self->{btn_send_gcode} = Wx::Button->new($self, -1, "Αποστολή στον εκτυπωτή", wxDefaultPosition, [-1, 30], wxBU_LEFT);
+    $self->{btn_export_stl} = Wx::Button->new($self, -1, "Εξαγωγή STL…", wxDefaultPosition, [-1, 30], wxBU_LEFT);
     #$self->{btn_export_gcode}->SetFont($Slic3r::GUI::small_font);
     #$self->{btn_export_stl}->SetFont($Slic3r::GUI::small_font);
     $self->{btn_send_gcode}->Hide;
@@ -320,9 +320,9 @@ sub new {
             $presets->AddGrowableCol(1, 1);
             $presets->SetFlexibleDirection(wxHORIZONTAL);
             my %group_labels = (
-                print       => 'Print settings',
-                filament    => 'Filament',
-                printer     => 'Printer',
+                print       => 'Ρυθμίσεις εκτύπωσης',
+                filament    => 'Υλικό εκτύπωσης',
+                printer     => 'Εκτυπωτής',
             );
             $self->{preset_choosers} = {};
             for my $group (qw(print filament printer)) {
@@ -344,7 +344,7 @@ sub new {
         
         my $object_info_sizer;
         {
-            my $box = Wx::StaticBox->new($self, -1, "Info");
+            my $box = Wx::StaticBox->new($self, -1, "Πληροφορίες");
             $object_info_sizer = Wx::StaticBoxSizer->new($box, wxVERTICAL);
             $object_info_sizer->SetMinSize([350,-1]);
             my $grid_sizer = Wx::FlexGridSizer->new(3, 4, 5, 5);
@@ -354,11 +354,11 @@ sub new {
             $object_info_sizer->Add($grid_sizer, 0, wxEXPAND);
             
             my @info = (
-                size        => "Size",
-                volume      => "Volume",
-                facets      => "Facets",
-                materials   => "Materials",
-                manifold    => "Manifold",
+                size        => "Μέγεθος",
+                volume      => "Όγκος",
+                facets      => "Όψεις",
+                materials   => "Υλικά",
+                manifold    => "Πολλαπλάσια",
             );
             while (my $field = shift @info) {
                 my $label = shift @info;
@@ -510,7 +510,7 @@ sub load_file {
     $Slic3r::GUI::Settings->{recent}{skein_directory} = dirname($input_file);
     wxTheApp->save_settings;
     
-    my $process_dialog = Wx::ProgressDialog->new('Loading…', "Processing input file…", 100, $self, 0);
+    my $process_dialog = Wx::ProgressDialog->new('Φόρτωση…', "Επεξεργασία αρχείου εισόδου…", 100, $self, 0);
     $process_dialog->Pulse;
     
     local $SIG{__WARN__} = Slic3r::GUI::warning_catcher($self);
@@ -520,7 +520,7 @@ sub load_file {
     
     if (defined $model) {
         $self->load_model_objects(@{$model->objects});
-        $self->statusbar->SetStatusText("Loaded " . basename($input_file));
+        $self->statusbar->SetStatusText("Φορτώθηκε " . basename($input_file));
     }
     
     $process_dialog->Destroy;
@@ -575,8 +575,8 @@ sub load_model_objects {
     if ($scaled_down) {
         Slic3r::GUI::show_info(
             $self,
-            'Your object appears to be too large, so it was automatically scaled down to fit your print bed.',
-            'Object too large?',
+            'Το αντικείμενό σας φαίνεται να είναι πολύ μεγάλο, για αυτό μειώθηκε αυτόματα για να χωρέσει στην πλατφόρμα εκτύπωσης.',
+            'Μέγεθος πολύ μεγάλο;',
         );
     }
     
@@ -722,7 +722,7 @@ sub set_number_of_copies {
     my $model_object = $self->{model}->objects->[$obj_idx];
     
     # prompt user
-    my $copies = Wx::GetNumberFromUser("", "Enter the number of copies of the selected object:", "Copies", $model_object->instances_count, 0, 1000, $self);
+    my $copies = Wx::GetNumberFromUser("", "Εισάγετε τον αριθμό των αντιγράφων του επιλεγμένου αντικειμένου:", "Αντίγραφα", $model_object->instances_count, 0, 1000, $self);
     my $diff = $copies - $model_object->instances_count;
     if ($diff == 0) {
         # no variation
@@ -752,7 +752,7 @@ sub rotate {
     
     if (!defined $angle) {
         my $axis_name = $axis == X ? 'X' : $axis == Y ? 'Y' : 'Z';
-        $angle = Wx::GetNumberFromUser("", "Enter the rotation angle:", "Rotate around $axis_name axis", $model_instance->rotation, -364, 364, $self);
+        $angle = Wx::GetNumberFromUser("", "Εισάγετε τη γωνία περιστροφής:", "Περιστροφή γύρω από τον $axis_name άξονα", $model_instance->rotation, -364, 364, $self);
         return if !$angle || $angle == -1;
         $angle = 0 - $angle;  # rotate clockwise (be consistent with button icon)
     }
@@ -831,7 +831,7 @@ sub changescale {
     
     if (defined $axis) {
         my $axis_name = $axis == X ? 'X' : $axis == Y ? 'Y' : 'Z';
-        my $scale = Wx::GetNumberFromUser("", "Enter the scale % for the selected object:", "Scale along $axis_name", 100, 0, 100000, $self);
+        my $scale = Wx::GetNumberFromUser("", "Εισάγετε το ποσοστό (%) κλίμακας για το επιλεγμένο αντικείμενο:", "Κλιμάκωση κατά μήκως του $axis_name", 100, 0, 100000, $self);
         return if !$scale || $scale < 0;
         
         # apply Z rotation before scaling
@@ -847,7 +847,7 @@ sub changescale {
         $self->make_thumbnail($obj_idx);
     } else {
         # max scale factor should be above 2540 to allow importing files exported in inches
-        my $scale = Wx::GetNumberFromUser("", "Enter the scale % for the selected object:", 'Scale', $model_instance->scaling_factor*100, 0, 100000, $self);
+        my $scale = Wx::GetNumberFromUser("", "Εισάγετε το ποσοστό (%) κλίμακας για το επιλεγμένο αντικείμενο:", 'Κλίμακα', $model_instance->scaling_factor*100, 0, 100000, $self);
         return if !$scale || $scale < 0;
     
         $self->{list}->SetItem($obj_idx, 2, "$scale%");
@@ -898,7 +898,7 @@ sub split_object {
     my $current_model_object = $new_model->get_object($obj_idx);
     
     if ($current_model_object->volumes_count > 1) {
-        Slic3r::GUI::warning_catcher($self)->("The selected object can't be split because it contains more than one volume/material.");
+        Slic3r::GUI::warning_catcher($self)->("Το επιλεγμένο αντικείμενο δεν μπορεί να χωριστεί επειδή περιέχει περισσότερου από έναν όγκους/υλικό.");
         return;
     }
     
@@ -907,7 +907,7 @@ sub split_object {
     my @model_objects = @{$current_model_object->split_object};
     if (@model_objects == 1) {
         $self->resume_background_process;
-        Slic3r::GUI::warning_catcher($self)->("The selected object couldn't be split because it contains only one part.");
+        Slic3r::GUI::warning_catcher($self)->("Το επιλεγμένο αρχείο δεν μπορεί να χωριστεί επειδή περιέχει μόνο ένα μέρος.");
         $self->resume_background_process;
         return;
     }
@@ -1065,7 +1065,7 @@ sub export_gcode {
     return if !@{$self->{objects}};
     
     if ($self->{export_gcode_output_file}) {
-        Wx::MessageDialog->new($self, "Another export job is currently running.", 'Error', wxOK | wxICON_ERROR)->ShowModal;
+        Wx::MessageDialog->new($self, "Μια άλλη εργασία εξαγωγής εκτελείται αυτή τη στιγμή.", 'Σφάλμα', wxOK | wxICON_ERROR)->ShowModal;
         return;
     }
     
@@ -1096,7 +1096,7 @@ sub export_gcode {
         $self->{export_gcode_output_file} = $self->{print}->expanded_output_filepath($output_file);
     } else {
         my $default_output_file = $self->{print}->expanded_output_filepath($main::opt{output});
-        my $dlg = Wx::FileDialog->new($self, 'Save G-code file as:', wxTheApp->output_path(dirname($default_output_file)),
+        my $dlg = Wx::FileDialog->new($self, 'Αποθήκευση αρχείου G-code ως:', wxTheApp->output_path(dirname($default_output_file)),
             basename($default_output_file), &Slic3r::GUI::FILE_WILDCARDS->{gcode}, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
         if ($dlg->ShowModal != wxID_OK) {
             $dlg->Destroy;
@@ -1114,7 +1114,7 @@ sub export_gcode {
     if ($Slic3r::have_threads) {
         $self->statusbar->SetCancelCallback(sub {
             $self->stop_background_process;
-            $self->statusbar->SetStatusText("Export cancelled");
+            $self->statusbar->SetStatusText("Η εξαγωγή ακυρώθηκε");
             $self->{export_gcode_output_file} = undef;
             $self->{send_gcode_file} = undef;
             
@@ -1148,7 +1148,7 @@ sub on_process_completed {
     $self->statusbar->StopBusy;
     $self->statusbar->SetStatusText($error // "");
     
-    Slic3r::debugf "Background processing completed.\n";
+    Slic3r::debugf "Η επεξεργασία στο παρασκήνιο ολοκληρώθηκε.\n";
     $self->{process_thread}->detach if $self->{process_thread};
     $self->{process_thread} = undef;
     
@@ -1175,7 +1175,7 @@ sub on_process_completed {
             }
             Slic3r::thread_cleanup();
         });
-        Slic3r::debugf "Background G-code export started.\n";
+        Slic3r::debugf "Η εξαγωγή του G-code στο παρασκήνιο ξεκίνησε.\n";
     }
 }
 
@@ -1195,7 +1195,7 @@ sub on_export_completed {
     $self->statusbar->StopBusy;
     $self->statusbar->SetStatusText("");
     
-    Slic3r::debugf "Background export process completed.\n";
+    Slic3r::debugf "Η διαδικασία εξαγωγής στο παρασκήνιο ολοκληρώθηκε.\n";
     $self->{export_thread}->detach if $self->{export_thread};
     $self->{export_thread} = undef;
     
@@ -1203,13 +1203,13 @@ sub on_export_completed {
     my $send_gcode = 0;
     if ($result) {
         if ($self->{send_gcode_file}) {
-            $message = "Sending G-code file to the OctoPrint server...";
+            $message = "Αποστολή αρχείου G-code στον εξυπηρετητή OctoPrint...";
             $send_gcode = 1;
         } else {
-            $message = "G-code file exported to " . $self->{export_gcode_output_file};
+            $message = "Το αρχείο G-code εξάχθηκε σε " . $self->{export_gcode_output_file};
         }
     } else {
-        $message = "Export failed";
+        $message = "Η εξαγωγή απέτυχε";
     }
     $self->{export_gcode_output_file} = undef;
     $self->statusbar->SetStatusText($message);
@@ -1245,9 +1245,9 @@ sub send_gcode {
     $self->statusbar->StopBusy;
     
     if ($res->is_success) {
-        $self->statusbar->SetStatusText("G-code file successfully uploaded to the OctoPrint server");
+        $self->statusbar->SetStatusText("Το αρχείο G-code μεταφορτώθηκε επιτυχώς στον εξυπηρετητή OctoPrint");
     } else {
-        my $message = "Error while uploading to the OctoPrint server: " . $res->status_line;
+        my $message = "Σφάλμα κατά τη διάρκεια μεταφόρτωσης στον εξυπηρετητή OctoPrint: " . $res->status_line;
         Slic3r::GUI::show_error($self, $message);
         $self->statusbar->SetStatusText($message);
     }
@@ -1260,7 +1260,7 @@ sub export_stl {
         
     my $output_file = $self->_get_export_file('STL') or return;
     Slic3r::Format::STL->write_file($output_file, $self->{model}, binary => 1);
-    $self->statusbar->SetStatusText("STL file exported to $output_file");
+    $self->statusbar->SetStatusText("Το αρχείο STL εξάχθηκε σε $output_file");
     
     # this method gets executed in a separate thread by wxWidgets since it's a button handler
     Slic3r::thread_cleanup() if $Slic3r::have_threads;
@@ -1276,7 +1276,7 @@ sub export_object_stl {
         
     my $output_file = $self->_get_export_file('STL') or return;
     Slic3r::Format::STL->write_file($output_file, $model_object->mesh, binary => 1);
-    $self->statusbar->SetStatusText("STL file exported to $output_file");
+    $self->statusbar->SetStatusText("Το αρχείο STL εξάχθηκε σε $output_file");
 }
 
 sub export_amf {
@@ -1286,7 +1286,7 @@ sub export_amf {
         
     my $output_file = $self->_get_export_file('AMF') or return;
     Slic3r::Format::AMF->write_file($output_file, $self->{model});
-    $self->statusbar->SetStatusText("AMF file exported to $output_file");
+    $self->statusbar->SetStatusText("Το αρχείο AMF εξάχθηκε σε $output_file");
     
     # this method gets executed in a separate thread by wxWidgets since it's a menu handler
     Slic3r::thread_cleanup() if $Slic3r::have_threads;
@@ -1302,7 +1302,7 @@ sub _get_export_file {
     {
         $output_file = $self->{print}->expanded_output_filepath($output_file);
         $output_file =~ s/\.gcode$/$suffix/i;
-        my $dlg = Wx::FileDialog->new($self, "Save $format file as:", dirname($output_file),
+        my $dlg = Wx::FileDialog->new($self, "Αποθήκευση $format αρχείου ως:", dirname($output_file),
             basename($output_file), &Slic3r::GUI::MODEL_WILDCARD, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
         if ($dlg->ShowModal != wxID_OK) {
             $dlg->Destroy;
@@ -1476,7 +1476,7 @@ sub object_cut_dialog {
     }
     
     if (!$Slic3r::GUI::have_OpenGL) {
-        Slic3r::GUI::show_error($self, "Please install the OpenGL modules to use this feature (see build instructions).");
+        Slic3r::GUI::show_error($self, "Παρακαλώ εγκαταστήστε τα εργαλεία της OpenGL για να χρησιμοποιήσετε αυτό το χαρακτηριστικό (δείτε τις οδηγίες εγκατάστασης).");
         return;
     }
     
@@ -1658,80 +1658,80 @@ sub object_menu {
     
     my $frame = $self->GetFrame;
     my $menu = Wx::Menu->new;
-    $frame->_append_menu_item($menu, "Delete\tCtrl+Del", 'Remove the selected object', sub {
+    $frame->_append_menu_item($menu, "Διαγραφή\tCtrl+Del", 'Αφαίρεση των επιλεγμένων αρχείων', sub {
         $self->remove;
     }, undef, 'brick_delete.png');
-    $frame->_append_menu_item($menu, "Increase copies\tCtrl++", 'Place one more copy of the selected object', sub {
+    $frame->_append_menu_item($menu, "Άυξηση αντιγράφων\tCtrl++", 'Προσθήκη ακόμα ενός αντιγράφου στο επιλεγμένο αντικείμενο', sub {
         $self->increase;
     }, undef, 'add.png');
-    $frame->_append_menu_item($menu, "Decrease copies\tCtrl+-", 'Remove one copy of the selected object', sub {
+    $frame->_append_menu_item($menu, "Μείωση αντιγράφων\tCtrl+-", 'Αφαίρεση ενός αντιγράφου από το επιλεγμένο αντικείμενο', sub {
         $self->decrease;
     }, undef, 'delete.png');
-    $frame->_append_menu_item($menu, "Set number of copies…", 'Change the number of copies of the selected object', sub {
+    $frame->_append_menu_item($menu, "Ορισμός αριθμο αντιγράφων…", 'Αλλαγή του αριθμού αντιγράφων του επιλεγμένου αρχείου', sub {
         $self->set_number_of_copies;
     }, undef, 'textfield.png');
     $menu->AppendSeparator();
-    $frame->_append_menu_item($menu, "Rotate 45° clockwise", 'Rotate the selected object by 45° clockwise', sub {
+    $frame->_append_menu_item($menu, "Περιστροφή 45° δεξιόστροφα", 'Περιστροφή του επιλεγμένου αντικειμένου κατά 45° δεξιόστροφα', sub {
         $self->rotate(-45);
     }, undef, 'arrow_rotate_clockwise.png');
-    $frame->_append_menu_item($menu, "Rotate 45° counter-clockwise", 'Rotate the selected object by 45° counter-clockwise', sub {
+    $frame->_append_menu_item($menu, "Περιστροφή 45° αριστερόστροφα", 'Περιστροφή του επιλεγμένου αντικειμένου κατά 45° αριστερόστροφα', sub {
         $self->rotate(+45);
     }, undef, 'arrow_rotate_anticlockwise.png');
     
     my $rotateMenu = Wx::Menu->new;
-    my $rotateMenuItem = $menu->AppendSubMenu($rotateMenu, "Rotate", 'Rotate the selected object by an arbitrary angle');
+    my $rotateMenuItem = $menu->AppendSubMenu($rotateMenu, "Περιστροφή", 'Περιστροφή του επιλεγμένου αντικειμένου κατά μία αυθαίρετη γωνία');
     $frame->_set_menu_item_icon($rotateMenuItem, 'textfield.png');
-    $frame->_append_menu_item($rotateMenu, "Around X axis…", 'Rotate the selected object by an arbitrary angle around X axis', sub {
+    $frame->_append_menu_item($rotateMenu, "Γύρω από τον X άξονα…", 'Περιστροφή του επιλεγμένου αντικειμένου κατά μία αυθαίρετη γωνία γύρω από τον Χ άξονα', sub {
         $self->rotate(undef, X);
     });
-    $frame->_append_menu_item($rotateMenu, "Around Y axis…", 'Rotate the selected object by an arbitrary angle around Y axis', sub {
+    $frame->_append_menu_item($rotateMenu, "Γύρω από τον Y άξονα…", 'Περιστροφή του επιλεγμένου αντικειμένου κατά μία αυθαίρετη γωνία γύρω από τον Y άξονα', sub {
         $self->rotate(undef, Y);
     });
-    $frame->_append_menu_item($rotateMenu, "Around Z axis…", 'Rotate the selected object by an arbitrary angle around Z axis', sub {
+    $frame->_append_menu_item($rotateMenu, "Γύρω από τον Z άξονα…", 'Περιστροφή του επιλεγμένου αντικειμένου κατά μία αυθαίρετη γωνία γύρω από τον Z άξονα', sub {
         $self->rotate(undef, Z);
     });
     
     my $flipMenu = Wx::Menu->new;
-    my $flipMenuItem = $menu->AppendSubMenu($flipMenu, "Flip", 'Mirror the selected object');
+    my $flipMenuItem = $menu->AppendSubMenu($flipMenu, "Αναστροφή", 'Κατοπτρισμός του επιλεγμένου αντικειμένου');
     $frame->_set_menu_item_icon($flipMenuItem, 'shape_flip_horizontal.png');
-    $frame->_append_menu_item($flipMenu, "Along X axis…", 'Mirror the selected object along the X axis', sub {
+    $frame->_append_menu_item($flipMenu, "Γύρω από τον X άξονα…", 'Κατοπτρισμός του επιλεγμένου αντικειμένου γύρω από τον X άξονα', sub {
         $self->flip(X);
     });
-    $frame->_append_menu_item($flipMenu, "Along Y axis…", 'Mirror the selected object along the Y axis', sub {
+    $frame->_append_menu_item($flipMenu, "Γύρω από τον Y άξονα…", 'Κατοπτρισμός του επιλεγμένου αντικειμένου γύρω από τον Y άξονα', sub {
         $self->flip(Y);
     });
-    $frame->_append_menu_item($flipMenu, "Along Z axis…", 'Mirror the selected object along the Z axis', sub {
+    $frame->_append_menu_item($flipMenu, "Γύρω από τον Z άξονα…", 'Κατοπτρισμός του επιλεγμένου αντικειμένου γύρω από τον Z άξονα', sub {
         $self->flip(Z);
     });
     
     my $scaleMenu = Wx::Menu->new;
-    my $scaleMenuItem = $menu->AppendSubMenu($scaleMenu, "Scale", 'Scale the selected object along a single axis');
+    my $scaleMenuItem = $menu->AppendSubMenu($scaleMenu, "Κλίμακα", 'Κλιμάκωση του επιλεγμένου αντικειμένου κατά μήκος ενός μοναδικού άξονα');
     $frame->_set_menu_item_icon($scaleMenuItem, 'arrow_out.png');
-    $frame->_append_menu_item($scaleMenu, "Uniformly…", 'Scale the selected object along the XYZ axes', sub {
+    $frame->_append_menu_item($scaleMenu, "Ομοιόμορφα…", 'Κλιμάκωση του επιλεγμένου αντικειμένου κατά μήκος των XYZ αξόνων', sub {
         $self->changescale(undef);
     });
-    $frame->_append_menu_item($scaleMenu, "Along X axis…", 'Scale the selected object along the X axis', sub {
+    $frame->_append_menu_item($scaleMenu, "Κατά μήκος του X άξονα…", 'Κλιμάκωση του επιλεγμένου αντικειμένου κατά μήκος του X άξονα', sub {
         $self->changescale(X);
     });
-    $frame->_append_menu_item($scaleMenu, "Along Y axis…", 'Scale the selected object along the Y axis', sub {
+    $frame->_append_menu_item($scaleMenu, "Κατά μήκος του Y άξονα…", 'Κλιμάκωση του επιλεγμένου αντικειμένου κατά μήκος του Y άξονα', sub {
         $self->changescale(Y);
     });
-    $frame->_append_menu_item($scaleMenu, "Along Z axis…", 'Scale the selected object along the Z axis', sub {
+    $frame->_append_menu_item($scaleMenu, "Κατά μήκος του Z άξονα…", 'Κλιμάκωση του επιλεγμένου αντικειμένου κατά μήκος του Z άξονα', sub {
         $self->changescale(Z);
     });
     
-    $frame->_append_menu_item($menu, "Split", 'Split the selected object into individual parts', sub {
+    $frame->_append_menu_item($menu, "Διαίρεση", 'Διαίρεση του επιλεγμένου αντικειμένου σε επιμέρους τμήματα', sub {
         $self->split_object;
     }, undef, 'shape_ungroup.png');
-    $frame->_append_menu_item($menu, "Cut…", 'Open the 3D cutting tool', sub {
+    $frame->_append_menu_item($menu, "Αποκοπή…", 'Άνοιγμα του εργαλείου κοπής 3D', sub {
         $self->object_cut_dialog;
     }, undef, 'package.png');
     $menu->AppendSeparator();
-    $frame->_append_menu_item($menu, "Settings…", 'Open the object editor dialog', sub {
+    $frame->_append_menu_item($menu, "Ρυθμίσεις…", 'Άνοιγμα του παραθύρου επεξεργαστή αντικειμένου', sub {
         $self->object_settings_dialog;
     }, undef, 'cog.png');
     $menu->AppendSeparator();
-    $frame->_append_menu_item($menu, "Export object as STL…", 'Export this single object as STL file', sub {
+    $frame->_append_menu_item($menu, "Εξαγωγή αντικειμένου ως STL…", 'Εξαγωγή του μεμονομένου αντικειμένου ως αρχείο STL', sub {
         $self->export_object_stl;
     }, undef, 'brick_go.png');
     

@@ -464,7 +464,7 @@ PrintConfigDef::build_def() {
     Options["interface_shells"].category = "Στρώσεις και Περίμετροι";
 
     Options["layer_gcode"].type = coString;
-    Options["layer_gcode"].label = "G-code μετά την αλλαγή στρώσης";
+    Options["layer_gcode"].label = "After layer change G-code";
     Options["layer_gcode"].tooltip = "Αυτό το κομμάτι προσαρμοσμένου κώδικα προστίθεται σε κάθε αλλαγή στρώσης, αμέσως μετά την Ζ κίνηση και πριν o εξωθητήρας μεταφερθεί στο αρχικό σημείο της πρώτης στρώσης. Σημειώστε οτί μπορείτε να χρησιμοποιήσετε μεταβλητές για όλες τις ρυθμίσεις του Slic3r καθώς επίσης και τα [layer_num] και [layer_z].";
     Options["layer_gcode"].cli = "after-layer-gcode|layer-gcode=s";
     Options["layer_gcode"].multiline = true;

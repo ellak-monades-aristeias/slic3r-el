@@ -13,7 +13,7 @@ sub new {
     $self->{timer} = Wx::Timer->new($self);
     $self->{prog} = Wx::Gauge->new($self, wxGA_HORIZONTAL, 100, wxDefaultPosition, wxDefaultSize);
     $self->{prog}->Hide;
-    $self->{cancelbutton} = Wx::Button->new($self, -1, "Cancel", wxDefaultPosition, wxDefaultSize);
+    $self->{cancelbutton} = Wx::Button->new($self, -1, "Ακύρωση", wxDefaultPosition, wxDefaultSize);
     $self->{cancelbutton}->Hide;
     
     $self->SetFieldsCount(3);

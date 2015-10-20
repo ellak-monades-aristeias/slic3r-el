@@ -12,7 +12,7 @@ use base 'Wx::Dialog';
 sub new {
     my $class = shift;
     my ($parent) = @_;
-    my $self = $class->SUPER::new($parent, -1, 'About Slic3r', wxDefaultPosition, [600, 340], wxCAPTION);
+    my $self = $class->SUPER::new($parent, -1, 'Σχετικά με το Slic3r', wxDefaultPosition, [600, 340], wxCAPTION);
 
     $self->SetBackgroundColour(Wx::wxWHITE);
     my $hsizer = Wx::BoxSizer->new(wxHORIZONTAL);
@@ -36,7 +36,7 @@ sub new {
     $vsizer->Add($title, 0, wxALIGN_LEFT | wxTOP, 30);
 
     # version
-    my $version = Wx::StaticText->new($self, -1, "Version $Slic3r::VERSION", wxDefaultPosition, wxDefaultSize);
+    my $version = Wx::StaticText->new($self, -1, "Έκδοση $Slic3r::VERSION", wxDefaultPosition, wxDefaultSize);
     my $version_font = Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     $version_font->SetPointSize(&Wx::wxMSW ? 9 : 11);
     $version->SetFont($version_font);

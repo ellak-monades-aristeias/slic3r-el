@@ -33,7 +33,7 @@ sub new {
     
     # initialize status bar
     $self->{statusbar} = Slic3r::GUI::ProgressStatusBar->new($self, -1);
-    $self->{statusbar}->SetStatusText("Version $Slic3r::VERSION - Remember to check for updates at http://slic3r.org/");
+    $self->{statusbar}->SetStatusText("Έκδοση $Slic3r::VERSION - Θυμηθείτε να ελέγξετε για ενημερωεις στη διεύθυνση http://slic3r.org/");
     $self->SetStatusBar($self->{statusbar});
     
     $self->{loaded} = 1;
@@ -91,7 +91,7 @@ sub _init_tabpanel {
     $self->{tabpanel} = my $panel = Wx::Notebook->new($self, -1, wxDefaultPosition, wxDefaultSize, wxNB_TOP | wxTAB_TRAVERSAL);
     
     if (!$self->{no_plater}) {
-        $panel->AddPage($self->{plater} = Slic3r::GUI::Plater->new($panel), "Plater");
+        $panel->AddPage($self->{plater} = Slic3r::GUI::Plater->new($panel), "Πλατφόρμα");
     }
     $self->{options_tabs} = {};
     
@@ -120,7 +120,7 @@ sub _init_tabpanel {
                     
                     # save a copy into each preset section
                     # so that user gets the config when switching to expert mode
-                    $config->save(sprintf "$Slic3r::GUI::datadir/%s/%s.ini", $tab->name, 'Simple Mode');
+                    $config->save(sprintf "$Slic3r::GUI::datadir/%s/%s.ini", $tab->name, 'Απλή Λειτουργία');
                     $Slic3r::GUI::Settings->{presets}{$tab->name} = 'Simple Mode.ini';
                     wxTheApp->save_settings;
                 }
@@ -155,53 +155,53 @@ sub _init_menubar {
     # File menu
     my $fileMenu = Wx::Menu->new;
     {
-        $self->_append_menu_item($fileMenu, "&Load Config…\tCtrl+L", 'Load exported configuration file', sub {
+        $self->_append_menu_item($fileMenu, "&Φόρτωση Διαμόρφωσης…\tCtrl+L", 'Φόρτωση εξαγώμενου αρχείου διαμόρφωσης', sub {
             $self->load_config_file;
         }, undef, 'plugin_add.png');
-        $self->_append_menu_item($fileMenu, "&Export Config…\tCtrl+E", 'Export current configuration to file', sub {
+        $self->_append_menu_item($fileMenu, "&Εξαγωγή Διαμόρφωσης…\tCtrl+E", 'Εξαγωγή της τρέχουσας διαμόρφωσης σε αρχείο', sub {
             $self->export_config;
         }, undef, 'plugin_go.png');
-        $self->_append_menu_item($fileMenu, "&Load Config Bundle…", 'Load presets from a bundle', sub {
+        $self->_append_menu_item($fileMenu, "&Φόρτωση Δέσμης Διαμορφώσεων…", 'Φόρτωση των προκαθορισμένων ρυθμίσεων από μία δέσμη', sub {
             $self->load_configbundle;
         }, undef, 'lorry_add.png');
-        $self->_append_menu_item($fileMenu, "&Export Config Bundle…", 'Export all presets to file', sub {
+        $self->_append_menu_item($fileMenu, "&Εξαγωγή Δέσμης Διαμορφώσεων…", 'Εξαγωγή όλων των προκαθορισμένων ρυθμίσεων σε αρχείο', sub {
             $self->export_configbundle;
         }, undef, 'lorry_go.png');
         $fileMenu->AppendSeparator();
         my $repeat;
-        $self->_append_menu_item($fileMenu, "Q&uick Slice…\tCtrl+U", 'Slice file', sub {
+        $self->_append_menu_item($fileMenu, "Γρήγορο Τεμάχισμα…\tCtrl+U", 'Τεμαχισμός αρχείου', sub {
             wxTheApp->CallAfter(sub {
                 $self->quick_slice;
                 $repeat->Enable(defined $Slic3r::GUI::MainFrame::last_input_file);
             });
         }, undef, 'cog_go.png');
-        $self->_append_menu_item($fileMenu, "Quick Slice and Save &As…\tCtrl+Alt+U", 'Slice file and save as', sub {
+        $self->_append_menu_item($fileMenu, "Γρήγορο Τεμάχισμα και Αποθήκευση ως…\tCtrl+Alt+U", 'Τεμάχισμα αρχείου και αποθήκευση ως', sub {
             wxTheApp->CallAfter(sub {
                 $self->quick_slice(save_as => 1);
                 $repeat->Enable(defined $Slic3r::GUI::MainFrame::last_input_file);
             });
         }, undef, 'cog_go.png');
-        $repeat = $self->_append_menu_item($fileMenu, "&Repeat Last Quick Slice\tCtrl+Shift+U", 'Repeat last quick slice', sub {
+        $repeat = $self->_append_menu_item($fileMenu, "&Επανάληψη Τελευταίου Γρήγορου Τεμαχίσματος\tCtrl+Shift+U", 'Επανάληψη τελευταίου γρήγορου τεμαχίσματος', sub {
             wxTheApp->CallAfter(sub {
                 $self->quick_slice(reslice => 1);
             });
         }, undef, 'cog_go.png');
         $repeat->Enable(0);
         $fileMenu->AppendSeparator();
-        $self->_append_menu_item($fileMenu, "Slice to SV&G…\tCtrl+G", 'Slice file to SVG', sub {
+        $self->_append_menu_item($fileMenu, "Τεμάχισμα σε SV&G…\tCtrl+G", 'Τεμάχισμα αρχείου σε SVG', sub {
             $self->quick_slice(save_as => 1, export_svg => 1);
         }, undef, 'shape_handles.png');
         $fileMenu->AppendSeparator();
-        $self->_append_menu_item($fileMenu, "Repair STL file…", 'Automatically repair an STL file', sub {
+        $self->_append_menu_item($fileMenu, "Διόρθωση αρχείου STL…", 'Αυτόματη διόρθωση ενός αρχείου STL', sub {
             $self->repair_stl;
         }, undef, 'wrench.png');
         $fileMenu->AppendSeparator();
         # Cmd+, is standard on OS X - what about other operating systems?
-        $self->_append_menu_item($fileMenu, "Preferences…\tCtrl+,", 'Application preferences', sub {
+        $self->_append_menu_item($fileMenu, "Προτιμήσεις…\tCtrl+,", 'Προτιμήσεις εφαρμογής', sub {
             Slic3r::GUI::Preferences->new($self)->ShowModal;
         }, wxID_PREFERENCES);
         $fileMenu->AppendSeparator();
-        $self->_append_menu_item($fileMenu, "&Quit", 'Quit Slic3r', sub {
+        $self->_append_menu_item($fileMenu, "&Έξοδος", 'Έξοδος από το Slic3r', sub {
             $self->Close(0);
         }, wxID_EXIT);
     }
@@ -211,13 +211,13 @@ sub _init_menubar {
         my $plater = $self->{plater};
         
         $self->{plater_menu} = Wx::Menu->new;
-        $self->_append_menu_item($self->{plater_menu}, "Export G-code...", 'Export current plate as G-code', sub {
+        $self->_append_menu_item($self->{plater_menu}, "Εξαγωγή G-code...", 'Εξαγωγή τρέχουσας πλατφόρμας ως G-code', sub {
             $plater->export_gcode;
         }, undef, 'cog_go.png');
-        $self->_append_menu_item($self->{plater_menu}, "Export plate as STL...", 'Export current plate as STL', sub {
+        $self->_append_menu_item($self->{plater_menu}, "Έξαγωγή ως STL...", 'Εξαγωγή τρέχουσας πλατφόρμας ως STL', sub {
             $plater->export_stl;
         }, undef, 'brick_go.png');
-        $self->_append_menu_item($self->{plater_menu}, "Export plate as AMF...", 'Export current plate as AMF', sub {
+        $self->_append_menu_item($self->{plater_menu}, "Εξαγωγή ως AMF...", 'Εξαγωγή τρέχουσας πλατφόρμας ως AMF', sub {
             $plater->export_amf;
         }, undef, 'brick_go.png');
         
@@ -229,16 +229,16 @@ sub _init_menubar {
     my $windowMenu = Wx::Menu->new;
     {
         my $tab_count = $self->{no_plater} ? 3 : 4;
-        $self->_append_menu_item($windowMenu, "Select &Plater Tab\tCtrl+1", 'Show the plater', sub {
+        $self->_append_menu_item($windowMenu, "Επιλογή Καρτέλας Πλατφόρμα\tCtrl+1", 'Εμφάνιση Πλατφόρμας', sub {
             $self->select_tab(0);
         }, undef, 'application_view_tile.png') unless $self->{no_plater};
-        $self->_append_menu_item($windowMenu, "Select P&rint Settings Tab\tCtrl+2", 'Show the print settings', sub {
+        $self->_append_menu_item($windowMenu, "Επιλογή Καρτέλας Ρυθμίσεις Εκτύπωσης\tCtrl+2", 'Εμφάνιση των ρυθμίσεων εκτύπωσης', sub {
             $self->select_tab($tab_count-3);
         }, undef, 'cog.png');
-        $self->_append_menu_item($windowMenu, "Select &Filament Settings Tab\tCtrl+3", 'Show the filament settings', sub {
+        $self->_append_menu_item($windowMenu, "Επιλογή Καρτέλας Ρυθμίσεις Υλικού\tCtrl+3", 'Εμφάνιση των ρυθμίσεων υλικού', sub {
             $self->select_tab($tab_count-2);
         }, undef, 'spool.png');
-        $self->_append_menu_item($windowMenu, "Select Print&er Settings Tab\tCtrl+4", 'Show the printer settings', sub {
+        $self->_append_menu_item($windowMenu, "Επιλογή Καρτέλας Ρυθμίσεις Εκτυπωτή\tCtrl+4", 'Εμφάνιση των ρυθμίσεων εκτυπωτή', sub {
             $self->select_tab($tab_count-1);
         }, undef, 'printer_empty.png');
     }
@@ -250,18 +250,18 @@ sub _init_menubar {
             $self->config_wizard;
         });
         $helpMenu->AppendSeparator();
-        $self->_append_menu_item($helpMenu, "Slic3r &Website", 'Open the Slic3r website in your browser', sub {
+        $self->_append_menu_item($helpMenu, "Ιστοσελίδα Slic3r", 'Άνοιγμα της ιστοσελίδας του Slic3r στον περιηγητή σας', sub {
             Wx::LaunchDefaultBrowser('http://slic3r.org/');
         });
-        my $versioncheck = $self->_append_menu_item($helpMenu, "Check for &Updates...", 'Check for new Slic3r versions', sub {
+        my $versioncheck = $self->_append_menu_item($helpMenu, "Έλεγχος για ενημερώσεις...", 'Έλεγχος για νέες εκδόσεις Slic3r', sub {
             wxTheApp->check_version(1);
         });
         $versioncheck->Enable(wxTheApp->have_version_check);
-        $self->_append_menu_item($helpMenu, "Slic3r &Manual", 'Open the Slic3r manual in your browser', sub {
+        $self->_append_menu_item($helpMenu, "Εγχειρίδιο Slic3r", 'Άνοιγμα του εγχειριδίου του Slic3r στον περιηγητή σας', sub {
             Wx::LaunchDefaultBrowser('http://manual.slic3r.org/');
         });
         $helpMenu->AppendSeparator();
-        $self->_append_menu_item($helpMenu, "&About Slic3r", 'Show about dialog', sub {
+        $self->_append_menu_item($helpMenu, "&Σχετικά με το Slic3r", 'Εμφάνιση του παραθύρου Σχετικά με', sub {
             wxTheApp->about;
         });
     }
@@ -271,11 +271,11 @@ sub _init_menubar {
     # will not be handled correctly
     {
         my $menubar = Wx::MenuBar->new;
-        $menubar->Append($fileMenu, "&File");
-        $menubar->Append($self->{plater_menu}, "&Plater") if $self->{plater_menu};
-        $menubar->Append($self->{object_menu}, "&Object") if $self->{object_menu};
-        $menubar->Append($windowMenu, "&Window");
-        $menubar->Append($helpMenu, "&Help");
+        $menubar->Append($fileMenu, "&Αρχείο");
+        $menubar->Append($self->{plater_menu}, "&Πλατφόρμα") if $self->{plater_menu};
+        $menubar->Append($self->{object_menu}, "&Αντικείμενο") if $self->{object_menu};
+        $menubar->Append($windowMenu, "&Παράθυρο");
+        $menubar->Append($helpMenu, "&Βοήθεια");
         $self->SetMenuBar($menubar);
     }
 }
@@ -307,7 +307,7 @@ sub quick_slice {
         my $input_file;
         my $dir = $Slic3r::GUI::Settings->{recent}{skein_directory} || $Slic3r::GUI::Settings->{recent}{config_directory} || '';
         if (!$params{reslice}) {
-            my $dialog = Wx::FileDialog->new($self, 'Choose a file to slice (STL/OBJ/AMF):', $dir, "", &Slic3r::GUI::MODEL_WILDCARD, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+            my $dialog = Wx::FileDialog->new($self, 'Επιλέξτε αρχείο για τεμαχισμό (STL/OBJ/AMF):', $dir, "", &Slic3r::GUI::MODEL_WILDCARD, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
             if ($dialog->ShowModal != wxID_OK) {
                 $dialog->Destroy;
                 return;
@@ -317,13 +317,13 @@ sub quick_slice {
             $qs_last_input_file = $input_file unless $params{export_svg};
         } else {
             if (!defined $qs_last_input_file) {
-                Wx::MessageDialog->new($self, "No previously sliced file.",
+                Wx::MessageDialog->new($self, "Κανένα προηγούμενο τεμαχισμένο αχείο.",
                                        'Error', wxICON_ERROR | wxOK)->ShowModal();
                 return;
             }
             if (! -e $qs_last_input_file) {
-                Wx::MessageDialog->new($self, "Previously sliced file ($qs_last_input_file) not found.",
-                                       'File Not Found', wxICON_ERROR | wxOK)->ShowModal();
+                Wx::MessageDialog->new($self, "Δεν βρέθηκε προηγουμένως τεμαχισμένο αρχείο ($qs_last_input_file).",
+                                       'Το αρχείο δεν βρέθηκε', wxICON_ERROR | wxOK)->ShowModal();
                 return;
             }
             $input_file = $qs_last_input_file;
@@ -365,7 +365,7 @@ sub quick_slice {
         } elsif ($params{save_as}) {
             $output_file = $sprint->expanded_output_filepath;
             $output_file =~ s/\.gcode$/.svg/i if $params{export_svg};
-            my $dlg = Wx::FileDialog->new($self, 'Save ' . ($params{export_svg} ? 'SVG' : 'G-code') . ' file as:',
+            my $dlg = Wx::FileDialog->new($self, 'Αποθήκευση ' . ($params{export_svg} ? 'SVG' : 'G-code') . ' αρχείου ως:',
                 wxTheApp->output_path(dirname($output_file)),
                 basename($output_file), $params{export_svg} ? &Slic3r::GUI::FILE_WILDCARDS->{svg} : &Slic3r::GUI::FILE_WILDCARDS->{gcode}, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
             if ($dlg->ShowModal != wxID_OK) {
@@ -380,7 +380,7 @@ sub quick_slice {
         }
         
         # show processbar dialog
-        $progress_dialog = Wx::ProgressDialog->new('Slicing…', "Processing $input_file_basename…", 
+        $progress_dialog = Wx::ProgressDialog->new('Τεμαχισμός…', "Επεξεργασία $input_file_basename…", 
             100, $self, 0);
         $progress_dialog->Pulse;
         
@@ -400,9 +400,9 @@ sub quick_slice {
         $progress_dialog->Destroy;
         undef $progress_dialog;
         
-        my $message = "$input_file_basename was successfully sliced.";
+        my $message = "$input_file_basename τεμαχίστηκε επιτυχώς.";
         wxTheApp->notify($message);
-        Wx::MessageDialog->new($self, $message, 'Slicing Done!', 
+        Wx::MessageDialog->new($self, $message, 'Ο Τεμαχισμός Ολοκληρώθηκε!', 
             wxOK | wxICON_INFORMATION)->ShowModal;
     };
     Slic3r::GUI::catch_error($self, sub { $progress_dialog->Destroy if $progress_dialog });
@@ -414,7 +414,7 @@ sub repair_stl {
     my $input_file;
     {
         my $dir = $Slic3r::GUI::Settings->{recent}{skein_directory} || $Slic3r::GUI::Settings->{recent}{config_directory} || '';
-        my $dialog = Wx::FileDialog->new($self, 'Select the STL file to repair:', $dir, "", &Slic3r::GUI::FILE_WILDCARDS->{stl}, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+        my $dialog = Wx::FileDialog->new($self, 'Επιλέξτε το αρχείο STL για τη διόρθωση:', $dir, "", &Slic3r::GUI::FILE_WILDCARDS->{stl}, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
         if ($dialog->ShowModal != wxID_OK) {
             $dialog->Destroy;
             return;
@@ -426,7 +426,7 @@ sub repair_stl {
     my $output_file = $input_file;
     {
         $output_file =~ s/\.stl$/_fixed.obj/i;
-        my $dlg = Wx::FileDialog->new($self, "Save OBJ file (less prone to coordinate errors than STL) as:", dirname($output_file),
+        my $dlg = Wx::FileDialog->new($self, "Αποθήκευση αρχείου OBJ (λιγότερο επιρρεπείς στο να συντονίσουν τα λάθη σε σχέση με STL) ως:", dirname($output_file),
             basename($output_file), &Slic3r::GUI::FILE_WILDCARDS->{obj}, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
         if ($dlg->ShowModal != wxID_OK) {
             $dlg->Destroy;
@@ -440,7 +440,7 @@ sub repair_stl {
     $tmesh->ReadSTLFile(Slic3r::encode_path($input_file));
     $tmesh->repair;
     $tmesh->WriteOBJFile(Slic3r::encode_path($output_file));
-    Slic3r::GUI::show_info($self, "Your file was repaired.", "Repair");
+    Slic3r::GUI::show_info($self, "Το αρχείο σας διορθώθηκε.", "Διόρθωση");
 }
 
 sub extra_variables {
@@ -466,7 +466,7 @@ sub export_config {
     
     my $dir = $last_config ? dirname($last_config) : $Slic3r::GUI::Settings->{recent}{config_directory} || $Slic3r::GUI::Settings->{recent}{skein_directory} || '';
     my $filename = $last_config ? basename($last_config) : "config.ini";
-    my $dlg = Wx::FileDialog->new($self, 'Save configuration as:', $dir, $filename, 
+    my $dlg = Wx::FileDialog->new($self, 'Αποθήκευση διαμόρφωσης ως:', $dir, $filename, 
         &Slic3r::GUI::FILE_WILDCARDS->{ini}, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if ($dlg->ShowModal == wxID_OK) {
         my $file = Slic3r::decode_path($dlg->GetPath);
@@ -485,7 +485,7 @@ sub load_config_file {
     if (!$file) {
         return unless $self->check_unsaved_changes;
         my $dir = $last_config ? dirname($last_config) : $Slic3r::GUI::Settings->{recent}{config_directory} || $Slic3r::GUI::Settings->{recent}{skein_directory} || '';
-        my $dlg = Wx::FileDialog->new($self, 'Select configuration to load:', $dir, "config.ini", 
+        my $dlg = Wx::FileDialog->new($self, 'Επιλογή διαμόρφωσης προς φόρτωση:', $dir, "config.ini", 
                 &Slic3r::GUI::FILE_WILDCARDS->{ini}, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
         return unless $dlg->ShowModal == wxID_OK;
         $file = Slic3r::decode_path($dlg->GetPaths);
@@ -510,7 +510,7 @@ sub export_configbundle {
     
     my $dir = $last_config ? dirname($last_config) : $Slic3r::GUI::Settings->{recent}{config_directory} || $Slic3r::GUI::Settings->{recent}{skein_directory} || '';
     my $filename = "Slic3r_config_bundle.ini";
-    my $dlg = Wx::FileDialog->new($self, 'Save presets bundle as:', $dir, $filename, 
+    my $dlg = Wx::FileDialog->new($self, 'Αποθήκευση δέσμης προεπιλογών ως:', $dir, $filename, 
         &Slic3r::GUI::FILE_WILDCARDS->{ini}, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if ($dlg->ShowModal == wxID_OK) {
         my $file = Slic3r::decode_path($dlg->GetPath);
@@ -543,7 +543,7 @@ sub load_configbundle {
     my $self = shift;
     
     my $dir = $last_config ? dirname($last_config) : $Slic3r::GUI::Settings->{recent}{config_directory} || $Slic3r::GUI::Settings->{recent}{skein_directory} || '';
-    my $dlg = Wx::FileDialog->new($self, 'Select configuration to load:', $dir, "config.ini", 
+    my $dlg = Wx::FileDialog->new($self, 'Επιλογή διαμόρφωσης προς φόρτωση:', $dir, "config.ini", 
             &Slic3r::GUI::FILE_WILDCARDS->{ini}, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     return unless $dlg->ShowModal == wxID_OK;
     my $file = Slic3r::decode_path($dlg->GetPaths);
@@ -585,9 +585,9 @@ sub load_configbundle {
             $tab->load_presets;
         }
     }
-    my $message = sprintf "%d presets successfully imported.", $imported;
+    my $message = sprintf "%d διαμορφώσεις εισήχθησαν επιτυχώς.", $imported;
     if ($self->{mode} eq 'simple' && $Slic3r::GUI::Settings->{_}{mode} eq 'expert') {
-        Slic3r::GUI::show_info($self, "$message You need to restart Slic3r to make the changes effective.");
+        Slic3r::GUI::show_info($self, "$message Πρέπει να επανεκκινήσετε το Slic3r για να εφαρμοστούν οι αλλαγές.");
     } else {
         Slic3r::GUI::show_info($self, $message);
     }
@@ -702,8 +702,8 @@ sub check_unsaved_changes {
     
     if (@dirty) {
         my $titles = join ', ', @dirty;
-        my $confirm = Wx::MessageDialog->new($self, "You have unsaved changes ($titles). Discard changes and continue anyway?",
-                                             'Unsaved Presets', wxICON_QUESTION | wxYES_NO | wxNO_DEFAULT);
+        my $confirm = Wx::MessageDialog->new($self, "Έχετε μη αποθηκευμένες αλλαγές ($titles). Απόρριψη αλλαγών και συνέχεια?",
+                                             'Μη αποθυκευμένες Προτιμήσεις', wxICON_QUESTION | wxYES_NO | wxNO_DEFAULT);
         return ($confirm->ShowModal == wxID_YES);
     }
     
