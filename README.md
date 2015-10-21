@@ -1,4 +1,4 @@
-Slic3r [![Build Status](https://travis-ci.org/alexrj/Slic3r.png?branch=master)](https://travis-ci.org/alexrj/Slic3r)
+Slic3r 
 ======
 
 Το Slic3r παίρνει αρχεία 3D μοντέλων (STL, OBJ, AMF) και τα μετατρέπει 
@@ -8,6 +8,8 @@ Slic3r [![Build Status](https://travis-ci.org/alexrj/Slic3r.png?branch=master)](
 Επίσης λειτουργεί με ελεγκτές Mach3, LinuxCNCκαι Machinekit.
 
 Περισσότερες πληροφορίες σχετικά με το Slic3r θα βρείτε στο [WIKI](https://github.com/ellak-monades-aristeias/slic3r-el/wiki).
+
+![Slic3r](https://cloud.githubusercontent.com/assets/12068064/10640848/44b20c38-781f-11e5-9ae1-9244992fd105.jpg)
 
 ### Γλώσσα Προγραμματισμού
 
