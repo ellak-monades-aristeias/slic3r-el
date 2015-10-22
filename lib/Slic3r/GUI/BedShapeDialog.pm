@@ -67,7 +67,7 @@ sub new {
     
     $self->{optgroups} = [];
     {
-        my $optgroup = $self->_init_shape_options_page('Rectangular');
+        my $optgroup = $self->_init_shape_options_page('Παραλληλόγραμμο');
         $optgroup->append_single_option_line(Slic3r::GUI::OptionsGroup::Option->new(
             opt_id      => 'rect_size',
             type        => 'point',
@@ -84,7 +84,7 @@ sub new {
         ));
     }
     {
-        my $optgroup = $self->_init_shape_options_page('Circular');
+        my $optgroup = $self->_init_shape_options_page('Κυκλικό');
         $optgroup->append_single_option_line(Slic3r::GUI::OptionsGroup::Option->new(
             opt_id      => 'diameter',
             type        => 'f',
@@ -95,7 +95,7 @@ sub new {
         ));
     }
     {
-        my $optgroup = $self->_init_shape_options_page('Custom');
+        my $optgroup = $self->_init_shape_options_page('Προσαρμοσμένο');
         $optgroup->append_line(Slic3r::GUI::OptionsGroup::Line->new(
             full_width  => 1,
             widget      => sub {

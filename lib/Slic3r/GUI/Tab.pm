@@ -509,7 +509,7 @@ sub build {
         {
             my $optgroup = $page->new_optgroup('Οριζόντια κελύφη');
             my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                label => 'Solid layers',
+                label => 'Συμπαγείς στρώσεις',
             );
             $line->append_option($optgroup->get_option('top_solid_layers'));
             $line->append_option($optgroup->get_option('bottom_solid_layers'));

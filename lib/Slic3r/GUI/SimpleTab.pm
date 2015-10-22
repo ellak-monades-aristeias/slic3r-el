@@ -112,7 +112,7 @@ use base 'Slic3r::GUI::SimpleTab';
 use Wx qw(:sizer);
 
 sub name { 'print' }
-sub title { 'Print Settings' }
+sub title { 'Ρυθμίσεις Εκτύπωσης' }
 
 sub build {
     my $self = shift;
@@ -128,12 +128,12 @@ sub build {
     ));
     
     {
-        my $optgroup = $self->new_optgroup('General');
+        my $optgroup = $self->new_optgroup('Γενικά');
         $optgroup->append_single_option_line('layer_height');
         $optgroup->append_single_option_line('perimeters');
         
         my $line = Slic3r::GUI::OptionsGroup::Line->new(
-            label => 'Solid layers',
+            label => 'Συμπαγείς στρώσεις',
         );
         $line->append_option($optgroup->get_option('top_solid_layers'));
         $line->append_option($optgroup->get_option('bottom_solid_layers'));
@@ -141,14 +141,14 @@ sub build {
     }
     
     {
-        my $optgroup = $self->new_optgroup('Infill');
+        my $optgroup = $self->new_optgroup('Εσωτερικό Γέμισμα');
         $optgroup->append_single_option_line('fill_density');
         $optgroup->append_single_option_line('fill_pattern');
         $optgroup->append_single_option_line('external_fill_pattern');
     }
     
     {
-        my $optgroup = $self->new_optgroup('Support material');
+        my $optgroup = $self->new_optgroup('Υλικό υποστήριξης');
         $optgroup->append_single_option_line('support_material');
         $optgroup->append_single_option_line('support_material_spacing');
         $optgroup->append_single_option_line('support_material_contact_distance');
@@ -157,19 +157,19 @@ sub build {
     }
     
     {
-        my $optgroup = $self->new_optgroup('Speed');
+        my $optgroup = $self->new_optgroup('Ταχύτητα');
         $optgroup->append_single_option_line('perimeter_speed');
         $optgroup->append_single_option_line('infill_speed');
         $optgroup->append_single_option_line('travel_speed');
     }
     
     {
-        my $optgroup = $self->new_optgroup('Brim');
+        my $optgroup = $self->new_optgroup('Χείλος');
         $optgroup->append_single_option_line('brim_width');
     }
     
     {
-        my $optgroup = $self->new_optgroup('Other');
+        my $optgroup = $self->new_optgroup('Άλλο');
         $optgroup->append_single_option_line('xy_size_compensation');
     }
 }
@@ -202,7 +202,7 @@ package Slic3r::GUI::SimpleTab::Filament;
 use base 'Slic3r::GUI::SimpleTab';
 
 sub name { 'filament' }
-sub title { 'Filament Settings' }
+sub title { 'Ρυθμίσεις Υλικού' }
 
 sub build {
     my $self = shift;
@@ -213,17 +213,17 @@ sub build {
     ));
     
     {
-        my $optgroup = $self->new_optgroup('Filament');
+        my $optgroup = $self->new_optgroup('Υλικό');
         $optgroup->append_single_option_line('filament_diameter', 0);
         $optgroup->append_single_option_line('extrusion_multiplier', 0);
     }
     
     {
-        my $optgroup = $self->new_optgroup('Temperature (°C)');
+        my $optgroup = $self->new_optgroup('Θερμοκρασία (°C)');
         
         {
             my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                label => 'Extruder',
+                label => 'Εξωθητήρας',
             );
             $line->append_option($optgroup->get_option('first_layer_temperature', 0));
             $line->append_option($optgroup->get_option('temperature', 0));
@@ -232,7 +232,7 @@ sub build {
         
         {
             my $line = Slic3r::GUI::OptionsGroup::Line->new(
-                label => 'Bed',
+                label => 'Πλατφόρμα εκτύπωσης',
             );
             $line->append_option($optgroup->get_option('first_layer_bed_temperature'));
             $line->append_option($optgroup->get_option('bed_temperature'));
@@ -247,7 +247,7 @@ use Wx qw(:sizer :button :bitmap :misc :id);
 use Wx::Event qw(EVT_BUTTON);
 
 sub name { 'printer' }
-sub title { 'Printer Settings' }
+sub title { 'Ρυθμίσεις εκτυπωτή' }
 
 sub build {
     my $self = shift;
@@ -266,7 +266,7 @@ sub build {
         my $bed_shape_widget = sub {
             my ($parent) = @_;
         
-            my $btn = Wx::Button->new($parent, -1, "Set…", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
+            my $btn = Wx::Button->new($parent, -1, "Ορισμός…", wxDefaultPosition, wxDefaultSize, wxBU_LEFT);
             $btn->SetFont($Slic3r::GUI::small_font);
             if ($Slic3r::GUI::have_button_icons) {
                 $btn->SetBitmap(Wx::Bitmap->new("$Slic3r::var/cog.png", wxBITMAP_TYPE_PNG));
@@ -287,9 +287,9 @@ sub build {
             return $sizer;
         };
     
-        my $optgroup = $self->new_optgroup('Size and coordinates');
+        my $optgroup = $self->new_optgroup('Μεγεθος και συντεταγμένες');
         my $line = Slic3r::GUI::OptionsGroup::Line->new(
-            label       => 'Bed shape',
+            label       => 'Σχήμα Πλατφόρμας',
             widget      => $bed_shape_widget,
         );
         $optgroup->append_line($line);
@@ -297,24 +297,24 @@ sub build {
     }
     
     {
-        my $optgroup = $self->new_optgroup('Firmware');
+        my $optgroup = $self->new_optgroup('Λογισμικό');
         $optgroup->append_single_option_line('gcode_flavor');
     }
     
     {
-        my $optgroup = $self->new_optgroup('Extruder');
+        my $optgroup = $self->new_optgroup('Εξωθητήρας');
         $optgroup->append_single_option_line('nozzle_diameter', 0);
     }
     
     {
-        my $optgroup = $self->new_optgroup('Retraction');
+        my $optgroup = $self->new_optgroup('Επανάκληση');
         $optgroup->append_single_option_line('retract_length', 0);
         $optgroup->append_single_option_line('retract_lift', 0);
         $optgroup->append_single_option_line('wipe', 0);
     }
     
     {
-        my $optgroup = $self->new_optgroup('Start G-code',
+        my $optgroup = $self->new_optgroup('Εναρξη G-code',
             label_width => 0,
         );
         my $option = $optgroup->get_option('start_gcode');
@@ -324,7 +324,7 @@ sub build {
     }
     
     {
-        my $optgroup = $self->new_optgroup('End G-code',
+        my $optgroup = $self->new_optgroup('Τερματισμός G-code',
             label_width => 0,
         );
         my $option = $optgroup->get_option('end_gcode');
