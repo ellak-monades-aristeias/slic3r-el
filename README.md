@@ -7,7 +7,7 @@ Slic3r
 που είναι βασισμένοι στο Marlin, το Sprinter και τοRepetierfirmware. 
 Επίσης λειτουργεί με ελεγκτές Mach3, LinuxCNCκαι Machinekit.
 
-Περισσότερες πληροφορίες σχετικά με το Slic3r θα βρείτε στο [WIKI](https://github.com/ellak-monades-aristeias/slic3r-el/wiki).
+Περισσότερες πληροφορίες σχετικά με το Slic3r θα βρείτε στο [Wiki](https://github.com/ellak-monades-aristeias/slic3r-el/wiki).
 
 ![Slic3r](https://cloud.githubusercontent.com/assets/12068064/10640848/44b20c38-781f-11e5-9ae1-9244992fd105.jpg)
 
