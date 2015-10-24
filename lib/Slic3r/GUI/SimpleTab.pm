@@ -314,7 +314,7 @@ sub build {
     }
     
     {
-        my $optgroup = $self->new_optgroup('Εναρξη G-code',
+        my $optgroup = $self->new_optgroup('G-code έναρξης',
             label_width => 0,
         );
         my $option = $optgroup->get_option('start_gcode');
@@ -324,7 +324,7 @@ sub build {
     }
     
     {
-        my $optgroup = $self->new_optgroup('Τερματισμός G-code',
+        my $optgroup = $self->new_optgroup('G-code τερματισμού',
             label_width => 0,
         );
         my $option = $optgroup->get_option('end_gcode');
