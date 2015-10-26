@@ -1,5 +1,6 @@
 package Slic3r::GUI::OptionsGroup::Field;
 use Moo;
+use utf8;
 
 # This is a base class for option fields.
 

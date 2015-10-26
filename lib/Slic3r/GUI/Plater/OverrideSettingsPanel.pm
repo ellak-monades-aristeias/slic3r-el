@@ -2,6 +2,7 @@ package Slic3r::GUI::Plater::OverrideSettingsPanel;
 use strict;
 use warnings;
 use utf8;
+use Encode;
 
 use List::Util qw(first);
 use Wx qw(:misc :sizer :button wxTAB_TRAVERSAL wxSUNKEN_BORDER wxBITMAP_TYPE_PNG
@@ -74,10 +75,10 @@ sub set_config {
 
 sub set_opt_keys {
     my ($self, $opt_keys) = @_;
-    
+	
     # sort options by category+label
     $self->{option_labels} = {
-        map { $_ => sprintf('%s > %s', $Slic3r::Config::Options->{$_}{category}, $Slic3r::Config::Options->{$_}{full_label} // $Slic3r::Config::Options->{$_}{label}) } @$opt_keys
+        map { $_ => sprintf('%s > %s', Encode::decode("UTF-8", $Slic3r::Config::Options->{$_}{category}), $Slic3r::Config::Options->{$_}{full_label} //$Slic3r::Config::Options->{$_}{label}) } @$opt_keys
     };
     $self->{options} = [ sort { $self->{option_labels}{$a} cmp $self->{option_labels}{$b} } @$opt_keys ];
 }
@@ -103,7 +104,7 @@ sub update_optgroup {
     foreach my $category (sort keys %categories) {
         my $optgroup = Slic3r::GUI::ConfigOptionsGroup->new(
             parent          => $self,
-            title           => $category,
+            title           => Encode::decode("UTF-8", $category),
             config          => $self->{config},
             full_labels     => 1,
             label_font      => $Slic3r::GUI::small_font,

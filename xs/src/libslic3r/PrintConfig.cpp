@@ -411,7 +411,7 @@ PrintConfigDef::build_def() {
     Options["infill_every_layers"].tooltip = "Αυτή η λειτουργία επιτρέπει τον συνδυασμό εσωτερικού γεμίσματος και αύξησης της ταχύτητας εκτύπωσης κάνοντας παχύτερες τις στρώσεις κατά το γέμισμα διατηρώντας παράλληλα την περίμετρο λεπτή.";
     Options["infill_every_layers"].sidetext = "στρώσεις";
     Options["infill_every_layers"].cli = "infill-every-layers=i";
-    Options["infill_every_layers"].full_label = "Combine infill every n layers";
+    Options["infill_every_layers"].full_label = "Συνδυασμός εσωτερικού γεμίσματος για κάθε Ν στρώσεις.";
     Options["infill_every_layers"].min = 1;
 
     Options["infill_extruder"].type = coInt;

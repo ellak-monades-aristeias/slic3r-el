@@ -197,7 +197,7 @@ sub selection_changed {
             # select nothing in 3D preview
             
             # attach object config to settings panel
-            $self->{staticbox}->SetLabel('Object Settings');
+            $self->{staticbox}->SetLabel('Ρυθμίσεις ΑΝτικειμένου');
             @opt_keys = (map @{$_->get_keys}, Slic3r::Config::PrintObject->new, Slic3r::Config::PrintRegion->new);
             $config = $self->{model_object}->config;
         }
