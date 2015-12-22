@@ -3,13 +3,16 @@ Slic3r
 
 Το Slic3r παίρνει αρχεία 3D μοντέλων (STL, OBJ, AMF) και τα μετατρέπει 
 σε εντολές G-code για εκτυπωτές 3D. Είναι συμβατό με κάθε σύγχρονο 
-3Dεκτυπωτή βασισμένο στο RepRaptoolchain, περιλαμβάνοντας όλους εκείνους 
-που είναι βασισμένοι στο Marlin, το Sprinter και τοRepetierfirmware. 
-Επίσης λειτουργεί με ελεγκτές Mach3, LinuxCNCκαι Machinekit.
+3Dεκτυπωτή βασισμένο στον τρόπο λειτουργίας της RepRap, περιλαμβάνοντας όλους εκείνους 
+που είναι βασισμένοι στο Marlin, το Sprinter και το Repetier λογισμικό (firmware). 
+Επίσης λειτουργεί με ελεγκτές Mach3, LinuxCNC και Machinekit.
 
 Περισσότερες πληροφορίες σχετικά με το Slic3r θα βρείτε στο [Wiki](https://github.com/ellak-monades-aristeias/slic3r-el/wiki).
 
 ![Slic3r](https://cloud.githubusercontent.com/assets/12068064/10640848/44b20c38-781f-11e5-9ae1-9244992fd105.jpg)
+
+### Description
+Slic3r takes 3D models (STL, OBJ, AMF) and converts them into G-code instructions for 3D printers. It's compatible with any modern printer based on the RepRap toolchain, including all those based on the Marlin, Sprinter and Repetier firmware. It also works with Mach3, LinuxCNC and Machinekit controllers.
 
 ### Γλώσσα Προγραμματισμού
 
